@@ -1,10 +1,13 @@
 /**
  * BMAD White-Label URL Personalizer Engine (whitelabel.js)
- * Supports: ?brand=&tagline=&primary=&dark=&bg=&wa=&logo=&reset_wl=1
+ * Adheres to: whitelabel-and-showroom-contract.md
+ * Supports query params: ?brand=&tagline=&primary=&dark=&bg=&wa=&logo=&reset_wl=1
  * Persists across Customer (/) and Admin (/admin.html) views via sessionStorage + link propagation.
  */
 (function () {
-  var STORAGE_KEY = 'bmad_wl_config_v1';
+  var STORAGE_KEY = 'bmad_wl_config_lerp_v1';
+  var DEFAULT_BRAND = 'NEXUS SUPPLY ERP';
+  var DEFAULT_WA = '919847011223';
 
   function sanitizeHex(val) {
     if (!val) return '';
@@ -62,6 +65,7 @@
     if (cfg.dark) {
       root.style.setProperty('--color-dark', cfg.dark);
       root.style.setProperty('--brand-dark', cfg.dark);
+      root.style.setProperty('--color-navy', cfg.dark);
     }
     if (cfg.bg) {
       root.style.setProperty('--bg-main', cfg.bg);
@@ -70,85 +74,59 @@
     }
   }
 
-  function renderSplitBrand(el, brandText, fallbackSub) {
-    while (el.firstChild) el.removeChild(el.firstChild);
-    var parts = brandText.split(/\s+/);
-    var mainPart = parts[0] || brandText;
-    var subPart = parts.length > 1 ? parts.slice(1).join(' ') : (fallbackSub || 'Boutique');
-    el.appendChild(document.createTextNode(mainPart + ' '));
-    var span = document.createElement('span');
-    span.textContent = subPart;
-    el.appendChild(span);
-  }
-
   function applyDomOverrides() {
     var cfg = window.__WL_CONFIG || {};
     applyCssVariables(cfg);
 
-    if (cfg.brand || (cfg.logo && /^https?:\/\//i.test(cfg.logo))) {
+    var currentBrand = cfg.brand || DEFAULT_BRAND;
+
+    // Apply Brand to all markers
+    if (cfg.brand) {
+      var isAdmin = window.location.pathname.indexOf('admin') !== -1;
+      document.title = cfg.brand + (isAdmin ? ' — Enterprise Ops Console' : ' — Multi-Branch Inventory ERP');
+
+      document.querySelectorAll('[data-wl-brand]').forEach(function (el) {
+        el.textContent = cfg.brand;
+      });
+
       document.querySelectorAll('.brand-logo').forEach(function (el) {
         if (cfg.logo && /^https?:\/\//i.test(cfg.logo)) {
           while (el.firstChild) el.removeChild(el.firstChild);
           var img = document.createElement('img');
           img.src = cfg.logo;
-          img.alt = cfg.brand || 'Brand Logo';
-          img.style.maxHeight = '38px';
+          img.alt = cfg.brand;
+          img.style.maxHeight = '28px';
           img.style.width = 'auto';
           img.style.display = 'block';
           el.appendChild(img);
-        } else if (cfg.brand) {
-          renderSplitBrand(el, cfg.brand, 'Boutique');
+        } else {
+          el.textContent = cfg.brand;
         }
-      });
-    }
-
-    if (cfg.brand) {
-      var isAdmin = window.location.pathname.indexOf('admin') !== -1;
-      document.title = cfg.brand + (isAdmin ? ' — Command Center & POS' : ' — Official Boutique Store');
-
-      document.querySelectorAll('.sidebar-brand-title').forEach(function (el) {
-        renderSplitBrand(el, cfg.brand, 'Hub');
-      });
-
-      document.querySelectorAll('.mobile-brand').forEach(function (el) {
-        renderSplitBrand(el, cfg.brand, 'Hub');
-      });
-
-      document.querySelectorAll('[data-wl-brand]').forEach(function (el) {
-        el.textContent = cfg.brand;
       });
     }
 
     if (cfg.tagline) {
-      document.querySelectorAll('[data-wl-tagline], .hero-banner p').forEach(function (el) {
+      document.querySelectorAll('[data-wl-tagline]').forEach(function (el) {
         el.textContent = cfg.tagline;
       });
     }
 
-    if (cfg.wa || cfg.brand) {
-      var waBtn = document.getElementById('floatingWaBtn');
-      var activeBrand = cfg.brand || 'Kaka by Eliza';
-      var activeWa = cfg.wa;
-      if (!activeWa && waBtn && waBtn.href) {
-        var m = waBtn.href.match(/wa\.me\/([0-9]+)/);
-        if (m) activeWa = m[1];
-      }
-      if (activeWa) {
-        if (waBtn) {
-          waBtn.href = 'https://wa.me/' + activeWa + '?text=' + encodeURIComponent('Hello ' + activeBrand + ', I have an inquiry regarding your collection');
-        }
-        var drawerWa = document.getElementById('drawerWaText');
-        if (drawerWa) {
-          var formatted = activeWa.length === 12
-            ? '+' + activeWa.slice(0, 2) + ' ' + activeWa.slice(2, 7) + ' ' + activeWa.slice(7)
-            : '+' + activeWa;
-          drawerWa.textContent = 'WhatsApp: ' + formatted;
-        }
-        document.querySelectorAll('#adminWaInput, input[data-wl-wa]').forEach(function (inp) {
-          inp.value = activeWa;
-        });
-      }
+    // Apply WhatsApp number & message
+    var activeWa = cfg.wa || DEFAULT_WA;
+    var waBtn = document.getElementById('floatingWaBtn');
+    if (waBtn) {
+      waBtn.href = 'https://wa.me/' + activeWa + '?text=' + encodeURIComponent('Hello ' + currentBrand + ' Logistics Desk, I would like to inquire about industrial inventory and dealer trade terms.');
     }
+    var drawerWa = document.getElementById('drawerWaText');
+    if (drawerWa) {
+      var formatted = activeWa.length === 12
+        ? '+' + activeWa.slice(0, 2) + ' ' + activeWa.slice(2, 7) + ' ' + activeWa.slice(7)
+        : '+' + activeWa;
+      drawerWa.textContent = 'WhatsApp Trade Desk: ' + formatted;
+    }
+    document.querySelectorAll('#adminWaInput, input[data-wl-wa]').forEach(function (inp) {
+      inp.value = activeWa;
+    });
 
     // Propagate query params across internal links (index.html <-> admin.html)
     var qs = new URLSearchParams();
@@ -157,9 +135,10 @@
     });
     var qsStr = qs.toString();
     if (qsStr) {
-      document.querySelectorAll('a[href^="admin.html"], a[href^="index.html"]').forEach(function (a) {
-        var base = a.getAttribute('href').split('?')[0];
-        a.setAttribute('href', base + '?' + qsStr);
+      document.querySelectorAll('a[href^="admin.html"], a[href^="index.html"], a[href^="/admin.html"], a[href^="/index.html"]').forEach(function (a) {
+        var href = a.getAttribute('href');
+        var parts = href.split('?');
+        a.setAttribute('href', parts[0] + '?' + qsStr);
       });
     }
   }
@@ -175,5 +154,5 @@
     applyDomOverrides();
   }
   window.addEventListener('load', applyDomOverrides);
-  setTimeout(applyDomOverrides, 600);
+  setTimeout(applyDomOverrides, 400);
 })();

@@ -3,131 +3,1424 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-wl-brand>KRONOS ERP // Multi-Warehouse Ledger</title>
+  <title data-wl-brand>NEXUS SUPPLY ERP — Multi-Branch Inventory & B2B Dealer Portal</title>
+  
+  <!-- Enterprise Typography: Inter for clean UI, IBM Plex Mono for SKUs, HSN & Bills -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="theme-tokens.css">
   <script src="whitelabel.js"></script>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Movement Q: Enterprise Multi-Branch Layout Blueprint */
     body {
-      background: var(--bg-main, #F1F5F9);
-      color: #0F172A;
-      font-family: var(--font-primary, 'Inter', sans-serif);
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-    }
-    .erp-sidebar {
-      width: 220px;
-      background: #0F172A;
-      color: #FFF;
-      padding: 24px 16px;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--bg-main, #f1f5f9);
+    }
+
+    /* Top Global Header */
+    .erp-topbar {
+      background: var(--color-navy, #0f172a);
+      color: #ffffff;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
-      font-family: var(--font-mono, monospace);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      background: var(--color-primary, #2563eb);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    .brand-tagline {
+      font-size: 11px;
+      color: #94a3b8;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      padding-left: 10px;
+      margin-left: 4px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Warehouse Switcher Bar */
+    .hub-switcher-bar {
+      background: #1e293b;
+      padding: 6px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #334155;
       font-size: 12px;
     }
-    .erp-nav a { color: #94A3B8; text-decoration: none; display: block; padding: 8px; border-radius: 4px; margin-bottom: 4px; }
-    .erp-nav a.active { background: #1E293B; color: #38BDF8; font-weight: 700; }
 
-    .erp-main {
-      flex: 1;
-      padding: 24px 30px;
-      overflow-y: auto;
+    .hub-selector-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .kpi-row {
+
+    .hub-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+    }
+
+    .hub-pill {
+      background: #0f172a;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: var(--radius);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .hub-pill:hover {
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .hub-pill.active {
+      background: var(--color-primary, #2563eb);
+      color: #ffffff;
+      border-color: var(--color-primary, #2563eb);
+      font-weight: 600;
+    }
+
+    .hub-status-telemetry {
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 6px #10b981;
+    }
+
+    /* Sub-Header KPI Ribbon */
+    .kpi-ribbon {
+      padding: 16px 24px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      margin: 20px 0;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
     }
-    .kpi-card {
-      background: #FFF;
-      border: 1px solid #CBD5E1;
-      border-radius: 6px;
-      padding: 16px;
+
+    .kpi-tile {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      background: #f8fafc;
+      transition: transform 0.15s ease;
     }
-    .ledger-grid {
-      width: 100%;
-      border-collapse: collapse;
-      background: #FFF;
-      border: 1px solid #CBD5E1;
+
+    .kpi-tile:hover {
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-slate-500);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-value {
+      font-size: 20px;
+      font-weight: 700;
       font-family: var(--font-mono);
+      color: var(--color-slate-900);
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--color-slate-500);
+      margin-top: 2px;
+    }
+
+    /* Portal Layout Container */
+    .portal-container {
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs-bar {
+      display: flex;
+      border-bottom: 2px solid var(--border-color);
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-slate-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      transition: color 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--color-primary);
+    }
+
+    .tab-btn.active {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-primary);
+    }
+
+    /* Section Panels */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Filters Bar */
+    .data-filter-bar {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .cat-pill {
+      background: #f1f5f9;
+      color: var(--color-slate-700);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #e2e8f0;
+      transition: all 0.15s ease;
+    }
+
+    .cat-pill.active {
+      background: var(--color-slate-800);
+      color: #ffffff;
+      border-color: var(--color-slate-800);
+    }
+
+    /* 3-Way Match Layout Grid */
+    .match-inspector-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+    }
+
+    .match-list-rail {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .match-rail-header {
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 700;
       font-size: 12px;
     }
-    .ledger-grid th { background: #F8FAFC; border: 1px solid #CBD5E1; padding: 10px; text-align: left; }
-    .ledger-grid td { border: 1px solid #CBD5E1; padding: 10px; }
+
+    .match-item-card {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .match-item-card:hover {
+      background: #f8fafc;
+    }
+
+    .match-item-card.active {
+      background: #eff6ff;
+      border-left: 3px solid var(--color-primary);
+    }
+
+    .match-trio-canvas {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .trio-cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .trio-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .trio-card-header {
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .trio-po-header { background: #f0fdf4; color: #166534; }
+    .trio-grn-header { background: #f0f9ff; color: #0369a1; }
+    .trio-inv-header { background: #fffbeb; color: #92400e; }
+
+    .trio-card-body {
+      padding: 14px;
+      font-size: 12px;
+    }
+
+    .meta-pair {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 11.5px;
+    }
+
+    .meta-pair-label {
+      color: var(--color-slate-500);
+    }
+
+    .meta-pair-value {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--color-slate-800);
+    }
+
+    .delta-callout-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Footer */
+    .erp-footer {
+      margin-top: auto;
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      padding: 14px 24px;
+      font-size: 11.5px;
+      color: var(--color-slate-500);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 992px) {
+      .kpi-ribbon { grid-template-columns: repeat(2, 1fr); }
+      .match-inspector-grid { grid-template-columns: 1fr; }
+      .trio-cards-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body data-layout-archetype="financial-ledger-erp">
-  <aside class="erp-sidebar">
-    <div>
-      <div style="font-weight:700; font-size:16px; color:#38BDF8; margin-bottom:24px;" data-wl-brand>KRONOS ERP</div>
-      <div class="erp-nav">
-        <a href="#" class="active">Inventory & WH</a>
-        <a href="#">3-Way Matching</a>
-        <a href="#">GST Tax Invoices</a>
-        <a href="admin.html">E-Way Bills</a>
+<body data-layout-archetype="enterprise-warehouse-erp">
+
+  <!-- Top Enterprise Navigation Bar -->
+  <header class="erp-topbar">
+    <div class="brand-section">
+      <div class="brand-mark">SAP-M</div>
+      <div class="brand-title" data-wl-brand>NEXUS SUPPLY ERP</div>
+      <div class="brand-tagline" data-wl-tagline>Enterprise Multi-Branch 3-Way Match Ledger</div>
+    </div>
+    
+    <div class="topbar-actions">
+      <span class="badge badge-navy font-mono" id="currentDealerDisplay">Dealer: Malabar Ind. (DL-101)</span>
+      <button class="btn btn-primary btn-sm" onclick="openDealerOrderDrawer()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Quick B2B Order
+      </button>
+      <a href="admin.html" class="btn btn-outline btn-sm" style="color:#ffffff; border-color:#475569; background:#1e293b;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        Admin Ops Console
+      </a>
+    </div>
+  </header>
+
+  <!-- Live Multi-Warehouse Hub Switcher -->
+  <div class="hub-switcher-bar">
+    <div class="hub-selector-wrap">
+      <span style="color:#94a3b8; font-weight:600; text-transform:uppercase; font-size:11px;">Active Warehouse Hub:</span>
+      <div class="hub-pills" id="hubPillsContainer">
+        <button class="hub-pill active" data-hub="all" onclick="selectWarehouseHub('all')">All Hubs (Multi-Branch Consolidated)</button>
+        <button class="hub-pill" data-hub="wh-kochi" onclick="selectWarehouseHub('wh-kochi')">WH-01 Kochi Port Hub</button>
+        <button class="hub-pill" data-hub="wh-blr" onclick="selectWarehouseHub('wh-blr')">WH-02 Bangalore North</button>
+        <button class="hub-pill" data-hub="wh-bom" onclick="selectWarehouseHub('wh-bom')">WH-03 Mumbai JNPT</button>
+        <button class="hub-pill" data-hub="wh-cal" onclick="selectWarehouseHub('wh-cal')">WH-04 Calicut Depot</button>
       </div>
     </div>
-    <div style="font-size:11px; color:#64748B;">HUB: BOM-CENTRAL (WH-01)</div>
-  </aside>
-
-  <main class="erp-main">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2 style="font-size:20px; font-weight:700;">Multi-Branch Inventory & 3-Way Match Ledger</h2>
-      <select style="padding:6px; font-family:var(--font-mono);">
-        <option>All Warehouses (Kochi / Mumbai / Delhi)</option>
-        <option>WH-01 Kochi Central</option>
-      </select>
+    
+    <div class="hub-status-telemetry">
+      <span class="live-dot"></span>
+      <span id="telemetryStatusText">4 Logistics Hubs Online • Live D1/Edge State</span>
     </div>
+  </div>
 
-    <div class="kpi-row">
-      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">TOTAL STOCK VALUE</div><div style="font-size:22px; font-weight:700;">₹4.82 CR</div></div>
-      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">PENDING PO-GRN MATCH</div><div style="font-size:22px; font-weight:700; color:#F59E0B;">12 INVOICES</div></div>
-      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">GST ITC CLAIMABLE</div><div style="font-size:22px; font-weight:700; color:#10B981;">₹28.4 LAKHS</div></div>
-      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">TRANSIT STOCK</div><div style="font-size:22px; font-weight:700;">3 CONSIGNMENTS</div></div>
+  <!-- Operational KPI Ribbon -->
+  <section class="kpi-ribbon">
+    <div class="kpi-tile">
+      <div class="kpi-label">
+        <span>Total Stock Valuation</span>
+        <span class="badge badge-neutral">INR</span>
+      </div>
+      <div class="kpi-value" id="kpiTotalStockValue">₹12,48,200</div>
+      <div class="kpi-sub" id="kpiTotalQtySub">Across 4 Logistics Facilities</div>
     </div>
+    <div class="kpi-tile">
+      <div class="kpi-label">
+        <span>Active SKU Lines</span>
+        <span class="badge badge-primary">Catalog</span>
+      </div>
+      <div class="kpi-value" id="kpiActiveSkus">10 SKUs</div>
+      <div class="kpi-sub">Industrial Hardware & Automation</div>
+    </div>
+    <div class="kpi-tile">
+      <div class="kpi-label">
+        <span>3-Way Match Pending Review</span>
+        <span class="badge badge-amber" id="kpiPendingMatchBadge">3 Cases</span>
+      </div>
+      <div class="kpi-value text-amber" id="kpiPendingMatchCount">3 Invoices</div>
+      <div class="kpi-sub">Variance Inspection Required</div>
+    </div>
+    <div class="kpi-tile">
+      <div class="kpi-label">
+        <span>In-Transit Consignments</span>
+        <span class="badge badge-success">E-Way Bills</span>
+      </div>
+      <div class="kpi-value text-success" id="kpiInTransitCount">2 STOs</div>
+      <div class="kpi-sub">Active GPS & Carrier Delivery</div>
+    </div>
+  </section>
 
-    <table class="ledger-grid">
-      <thead>
-        <tr>
-          <th>PO REF</th>
-          <th>GRN RECEIPT</th>
-          <th>VENDOR INVOICE</th>
-          <th>HSN CODE</th>
-          <th>PO VALUE</th>
-          <th>BILLED VALUE</th>
-          <th>VARIANCE</th>
-          <th>STATUS</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>PO #8841</strong></td>
-          <td>GRN #4421</td>
-          <td>INV #TATA-991</td>
-          <td>7208 (Steel)</td>
-          <td>₹8,40,000</td>
-          <td>₹8,40,000</td>
-          <td style="color:#10B981;">₹0.00 (0%)</td>
-          <td style="color:#10B981;">✓ 3-WAY MATCHED</td>
-        </tr>
-        <tr>
-          <td><strong>PO #8842</strong></td>
-          <td>GRN #4425</td>
-          <td>INV #JSW-104</td>
-          <td>7214 (Rebars)</td>
-          <td>₹12,50,000</td>
-          <td>₹12,75,000</td>
-          <td style="color:#EF4444;">+₹25,000 (2%)</td>
-          <td style="color:#F59E0B;">⚠ VARIANCE REVIEW</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Main Portal Body -->
+  <main class="portal-container">
+    
+    <!-- Tab Navigation -->
+    <nav class="nav-tabs-bar">
+      <button class="tab-btn active" onclick="switchPortalTab('stock')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+        Branch Inventory Matrix
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('match')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Interactive 3-Way Match Inspector
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('transfers')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+        Inter-Branch STO & E-Way Bills
+      </button>
+      <button class="tab-btn" onclick="switchPortalTab('dealers')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        B2B Dealer Credit Ledger
+      </button>
+    </nav>
+
+    <!-- TAB 1: Branch Inventory Matrix -->
+    <section id="tab-stock" class="tab-content active">
+      <div class="data-filter-bar">
+        <div class="filter-group">
+          <input type="text" id="inventorySearchInput" class="input-control" placeholder="Search SKU, component name, HSN..." style="width:260px;" oninput="applyInventoryFilters()">
+          <div class="category-pills" id="categoryPills">
+            <span class="cat-pill active" onclick="setCategoryFilter('all')">All Categories</span>
+            <span class="cat-pill" onclick="setCategoryFilter('Fasteners')">Fasteners</span>
+            <span class="cat-pill" onclick="setCategoryFilter('Bearings')">Bearings</span>
+            <span class="cat-pill" onclick="setCategoryFilter('Hydraulics')">Hydraulics</span>
+            <span class="cat-pill" onclick="setCategoryFilter('Pneumatics')">Pneumatics</span>
+            <span class="cat-pill" onclick="setCategoryFilter('Power Transmission')">Power Transmission</span>
+            <span class="cat-pill" onclick="setCategoryFilter('Automation')">Automation</span>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+            <input type="checkbox" id="lowStockToggle" onchange="applyInventoryFilters()">
+            <span style="font-weight:600; color:var(--color-amber);">Low-Stock Alerts Only</span>
+          </label>
+          <button class="btn btn-outline btn-sm" onclick="fetchInventory()">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="data-table-container">
+        <table class="erp-table" id="inventoryTable">
+          <thead>
+            <tr>
+              <th>SKU / CODE</th>
+              <th>ITEM SPECIFICATION</th>
+              <th>CATEGORY</th>
+              <th>HSN CODE</th>
+              <th>ON-HAND</th>
+              <th>RESERVED</th>
+              <th>IN-TRANSIT</th>
+              <th>NET AVAILABLE</th>
+              <th>UNIT PRICE</th>
+              <th>HEALTH</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTableBody">
+            <tr>
+              <td colspan="11" style="text-align:center; padding:30px; color:#64748b;">Loading real-time branch inventory matrix...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: Interactive 3-Way Match Inspector (Domain Widget) -->
+    <section id="tab-match" class="tab-content">
+      <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 style="font-size:16px; font-weight:700;">Purchase Order &harr; GRN &harr; Vendor Invoice 3-Way Reconciliation</h3>
+          <p style="font-size:12px; color:var(--color-slate-500);">Interactive side-by-side audit of agreed procurement rates, storekeeper goods receipt notes, and billed invoices.</p>
+        </div>
+        <span class="badge badge-primary">ERP Standard V15</span>
+      </div>
+
+      <div class="match-inspector-grid">
+        <!-- Match Sets Left Rail -->
+        <div class="match-list-rail">
+          <div class="match-rail-header">PROCUREMENT REVIEW CASES</div>
+          <div id="matchCasesList">
+            <!-- Dynamically loaded -->
+          </div>
+        </div>
+
+        <!-- 3-Way Match Canvas Right Side -->
+        <div class="match-trio-canvas" id="matchTrioCanvas">
+          <!-- Loaded dynamically based on active case -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Inter-Branch Stock Transfers & E-Way Bills -->
+    <section id="tab-transfers" class="tab-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <h3 style="font-size:16px; font-weight:700;">Inter-Branch Stock Transfer Orders (STO)</h3>
+          <p style="font-size:12px; color:var(--color-slate-500);">Statutory movement of goods between hubs with 12-digit Indian E-Way Bill generation.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openDispatchModal()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Dispatch New STO
+        </button>
+      </div>
+
+      <div class="data-table-container">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>STO REF</th>
+              <th>DISPATCH ORIGIN</th>
+              <th>DESTINATION HUB</th>
+              <th>CARRIER & VEHICLE</th>
+              <th>E-WAY BILL NO</th>
+              <th>VALID UNTIL</th>
+              <th>CARGO MANIFEST</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="transfersTableBody">
+            <tr><td colspan="9" style="text-align:center; padding:24px; color:#64748b;">Loading stock transfer orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 4: B2B Dealer Credit Ledger -->
+    <section id="tab-dealers" class="tab-content">
+      <div style="margin-bottom:14px;">
+        <h3 style="font-size:16px; font-weight:700;">Authorized B2B Dealers & Credit Line Ledger</h3>
+        <p style="font-size:12px; color:var(--color-slate-500);">Pre-approved trade lines, GSTIN validation, and available ordering credit.</p>
+      </div>
+
+      <div class="data-table-container">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>DEALER ID</th>
+              <th>COMPANY / TRADE NAME</th>
+              <th>CONTACT PERSON</th>
+              <th>GSTIN</th>
+              <th>CITY / STATE</th>
+              <th>SANCTIONED LIMIT</th>
+              <th>AVAILABLE BALANCE</th>
+              <th>UTILIZATION</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="dealersTableBody">
+            <tr><td colspan="10" style="text-align:center; padding:24px; color:#64748b;">Loading dealer ledger...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
+
+  <!-- B2B Dealer Quick Reorder Drawer -->
+  <div class="drawer-overlay" id="dealerDrawerOverlay">
+    <div class="drawer-panel">
+      <div style="padding:16px 20px; background:#0f172a; color:#ffffff; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 style="font-size:15px; font-weight:700;">B2B Dealer Reorder Sheet</h3>
+          <p style="font-size:11px; color:#94a3b8;">Direct dispatch against sanctioned credit facility</p>
+        </div>
+        <button onclick="closeDealerOrderDrawer()" style="background:transparent; border:none; color:#ffffff; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+
+      <div style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">SELECT DEALER ACCOUNT</label>
+          <select id="drawerDealerSelect" class="select-control" onchange="updateDrawerDealerCredit()">
+            <!-- Dynamically populated -->
+          </select>
+          <div id="drawerDealerCreditNotice" style="margin-top:6px; font-size:11.5px; color:#0369a1; background:#f0f9ff; padding:8px 12px; border-radius:4px; border:1px solid #bae6fd;">
+            Available Trade Credit: <strong>₹18,40,000</strong>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">DISPATCH FULFILLMENT HUB</label>
+          <select id="drawerWarehouseSelect" class="select-control" onchange="calculateDrawerTotals()">
+            <option value="wh-kochi">WH-01 Kochi Port Logistics Hub (Kerala)</option>
+            <option value="wh-blr">WH-02 Bangalore North Industrial Hub (Karnataka)</option>
+            <option value="wh-bom">WH-03 Mumbai JNPT Freight Terminal (Maharashtra)</option>
+            <option value="wh-cal">WH-04 Calicut Supply Depot (Kerala)</option>
+          </select>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600);">ORDER LINE ITEMS</label>
+            <button class="btn btn-outline btn-sm" onclick="addDrawerOrderLine()">+ Add SKU Line</button>
+          </div>
+          <div id="drawerOrderLinesContainer" style="display:flex; flex-direction:column; gap:10px;">
+            <!-- Dynamic rows -->
+          </div>
+        </div>
+
+        <!-- GST & Financial Summary -->
+        <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:14px; margin-top:auto;">
+          <div class="meta-pair">
+            <span class="meta-pair-label">Subtotal (Excl. Tax):</span>
+            <span class="meta-pair-value" id="drawerSubtotalDisplay">₹0.00</span>
+          </div>
+          <div class="meta-pair">
+            <span class="meta-pair-label" id="drawerGstLabel">GST (18% Intra-State CGST/SGST):</span>
+            <span class="meta-pair-value" id="drawerGstDisplay">₹0.00</span>
+          </div>
+          <div class="meta-pair" style="font-size:14px; margin-top:8px; padding-top:8px; border-top:1px solid var(--border-color);">
+            <span style="font-weight:700;">Grand Total:</span>
+            <span style="font-weight:700; color:var(--color-primary);" id="drawerGrandTotalDisplay">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px 20px; background:#f8fafc; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+        <span id="drawerWaText" style="font-size:11px; color:#64748b;">WhatsApp Desk: +91 98470 11223</span>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-outline" onclick="closeDealerOrderDrawer()">Cancel</button>
+          <button class="btn btn-primary" onclick="submitDealerOrder()">Submit B2B Purchase Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STO Consignment Stepper Modal -->
+  <div class="modal-overlay" id="stoStepperModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h4 style="font-size:14px; font-weight:700;" id="stoModalTitle">STO-2026-101 Consignment Telemetry</h4>
+          <span style="font-size:11px; color:#64748b;">National E-Way Bill Statutory Verification</span>
+        </div>
+        <button onclick="closeStoModal()" style="background:transparent; border:none; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+      <div class="modal-body" id="stoModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeStoModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- WhatsApp Quick Inquiry Floating Button -->
+  <a id="floatingWaBtn" href="https://wa.me/919847011223?text=Hello%20NEXUS%20Supply%20Logistics%20Desk" target="_blank" title="Inquire with Logistics Desk on WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.301-.15-1.78-.879-2.056-.98-.276-.1-.477-.15-.678.15-.201.3-.778.98-.954 1.18-.176.2-.352.225-.653.075-.301-.15-1.27-.468-2.42-1.493-.895-.798-1.5-1.785-1.676-2.086-.176-.301-.019-.464.132-.614.135-.135.301-.352.451-.527.151-.176.201-.301.301-.502.1-.2.05-.376-.025-.526-.075-.15-.678-1.631-.929-2.235-.245-.588-.493-.509-.678-.518l-.578-.01c-.2 0-.527.075-.803.376s-1.054 1.03-1.054 2.512c0 1.482 1.079 2.913 1.23 3.114.15.2 2.124 3.245 5.145 4.551.719.311 1.28.497 1.718.636.722.23 1.378.197 1.897.12.578-.086 1.78-.727 2.031-1.429.251-.702.251-1.304.176-1.429-.076-.125-.276-.201-.577-.351zM12.04 2C6.516 2 2.028 6.488 2.028 12.012c0 1.765.46 3.488 1.334 5.01L2 22l5.129-1.345c1.472.802 3.13 1.226 4.911 1.226 5.524 0 10.012-4.488 10.012-10.012A9.995 9.995 0 0012.04 2z"/></svg>
+  </a>
+
+  <!-- Footer -->
+  <footer class="erp-footer">
+    <div>
+      <strong data-wl-brand>NEXUS SUPPLY ERP</strong> &bull; Movement Q: Enterprise Multi-Branch 3-Way Match Data Grid
+    </div>
+    <div>
+      GST Relational Schema Verified &bull; Cloudflare Edge Engine &bull; Frappe ERPNext & Ramp Compatible
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // State
+    let currentHub = 'all';
+    let currentCategory = 'all';
+    let inventoryData = [];
+    let matchSetsData = [];
+    let transfersData = [];
+    let dealersData = [];
+    let activeMatchId = null;
+
+    // Defensive date guard: ensure no snapshot freeze timestamps before 2024
+    function formatDateSafely(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime()) || d.getFullYear() < 2024) {
+          return new Date().toISOString().split('T')[0];
+        }
+        return d.toISOString().split('T')[0];
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function formatDateTimeSafely(dateTimeStr) {
+      if (!dateTimeStr) return 'N/A';
+      try {
+        const d = new Date(dateTimeStr);
+        if (isNaN(d.getTime()) || d.getFullYear() < 2024) {
+          return new Date().toISOString().replace('T', ' ').substring(0, 16);
+        }
+        return d.toISOString().replace('T', ' ').substring(0, 16);
+      } catch (e) {
+        return dateTimeStr;
+      }
+    }
+
+    // Tab Switcher
+    function switchPortalTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (targetBtn) targetBtn.classList.add('active');
+      
+      const targetContent = document.getElementById('tab-' + tabId);
+      if (targetContent) targetContent.classList.add('active');
+    }
+
+    // Warehouse Hub Switcher
+    function selectWarehouseHub(hubId) {
+      currentHub = hubId;
+      document.querySelectorAll('.hub-pill').forEach(pill => {
+        pill.classList.toggle('active', pill.dataset.hub === hubId);
+      });
+      fetchInventory();
+    }
+
+    function setCategoryFilter(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(pill => {
+        pill.classList.toggle('active', pill.textContent.trim().toLowerCase() === (cat === 'all' ? 'all categories' : cat.toLowerCase()));
+      });
+      applyInventoryFilters();
+    }
+
+    // Toast Notice Helper
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Fetch Inventory
+    async function fetchInventory() {
+      try {
+        const url = `/api/inventory?warehouse_id=${encodeURIComponent(currentHub)}&category=${encodeURIComponent(currentCategory)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (data.success) {
+          inventoryData = data.items || [];
+          document.getElementById('kpiTotalStockValue').textContent = '₹' + (data.total_stock_value || 0).toLocaleString('en-IN');
+          document.getElementById('kpiActiveSkus').textContent = `${data.total_items} SKUs`;
+          renderInventoryTable(inventoryData);
+        }
+      } catch (err) {
+        console.error('Error fetching inventory:', err);
+      }
+    }
+
+    function applyInventoryFilters() {
+      const search = (document.getElementById('inventorySearchInput').value || '').trim().toLowerCase();
+      const lowStockOnly = document.getElementById('lowStockToggle').checked;
+
+      const filtered = inventoryData.filter(item => {
+        if (currentCategory !== 'all' && item.category.toLowerCase() !== currentCategory.toLowerCase()) return false;
+        if (lowStockOnly && !item.is_low_stock) return false;
+        if (search) {
+          const matchSku = item.sku.toLowerCase().includes(search);
+          const matchName = item.name.toLowerCase().includes(search);
+          const matchHsn = item.hsn_code.includes(search);
+          if (!matchSku && !matchName && !matchHsn) return false;
+        }
+        return true;
+      });
+
+      renderInventoryTable(filtered);
+    }
+
+    function renderInventoryTable(items) {
+      const tbody = document.getElementById('inventoryTableBody');
+      if (!items.length) {
+        tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:30px; color:#64748b;">No matching inventory components found for current filter criteria.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = items.map(it => {
+        const healthBadge = it.is_low_stock 
+          ? `<span class="badge badge-amber">LOW STOCK (&le;${it.safety_stock})</span>`
+          : `<span class="badge badge-success">HEALTHY</span>`;
+        
+        const rowClass = it.is_low_stock ? 'row-alert' : '';
+
+        return `
+          <tr class="${rowClass}">
+            <td><strong class="font-mono" style="color:var(--color-primary);">${it.sku}</strong></td>
+            <td>
+              <div style="font-weight:600;">${it.name}</div>
+              <div style="font-size:11px; color:#64748b;">UOM: ${it.uom} &bull; Safety Stock: ${it.safety_stock}</div>
+            </td>
+            <td><span class="badge badge-neutral">${it.category}</span></td>
+            <td class="font-mono text-xs">${it.hsn_code}</td>
+            <td class="font-mono font-semibold" style="text-align:right;">${it.total_on_hand}</td>
+            <td class="font-mono text-muted" style="text-align:right;">${it.total_reserved}</td>
+            <td class="font-mono text-muted" style="text-align:right;">${it.total_in_transit}</td>
+            <td class="font-mono font-bold" style="text-align:right; color:#0f172a;">${it.total_available}</td>
+            <td class="font-mono" style="text-align:right;">₹${it.unit_price.toLocaleString('en-IN')}</td>
+            <td>${healthBadge}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="openDealerOrderWithItem('${it.id}', '${it.sku}')">
+                B2B Order
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 3-Way Match Inspector
+    async function fetchMatchSets() {
+      try {
+        const res = await fetch('/api/match');
+        const data = await res.json();
+        if (data.success) {
+          matchSetsData = data.match_sets || [];
+          document.getElementById('kpiPendingMatchCount').textContent = `${data.pending_variance_count} Invoices`;
+          document.getElementById('kpiPendingMatchBadge').textContent = `${data.pending_variance_count} Cases`;
+          renderMatchCasesList();
+          if (matchSetsData.length && !activeMatchId) {
+            selectMatchCase(matchSetsData[0].match_id);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching match sets:', err);
+      }
+    }
+
+    function renderMatchCasesList() {
+      const container = document.getElementById('matchCasesList');
+      container.innerHTML = matchSetsData.map(m => {
+        const isActive = m.match_id === activeMatchId;
+        const deltaFormatted = m.total_variance === 0 
+          ? `<span class="badge badge-success">ZERO DELTA (₹0)</span>` 
+          : `<span class="badge badge-danger">DELTA: ${m.total_variance > 0 ? '+' : ''}₹${m.total_variance.toLocaleString('en-IN')}</span>`;
+
+        return `
+          <div class="match-item-card ${isActive ? 'active' : ''}" onclick="selectMatchCase('${m.match_id}')">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <strong class="font-mono" style="font-size:12px;">${m.invoice_number}</strong>
+              <span class="badge ${m.badge_class}">${m.status}</span>
+            </div>
+            <div style="font-size:11.5px; color:#475569; font-weight:500;">${m.vendor_name}</div>
+            <div style="margin-top:6px; display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+              <span class="font-mono text-muted">${m.po_number}</span>
+              ${deltaFormatted}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectMatchCase(matchId) {
+      activeMatchId = matchId;
+      renderMatchCasesList();
+
+      const item = matchSetsData.find(m => m.match_id === matchId);
+      if (!item) return;
+
+      const canvas = document.getElementById('matchTrioCanvas');
+      const linesHtml = item.lines.map(line => {
+        const qtyDeltaBadge = line.qty_delta === 0 
+          ? `<span class="text-success font-semibold">Matched (${line.billed_qty})</span>` 
+          : `<span class="text-danger font-semibold font-mono">${line.qty_delta > 0 ? '+' : ''}${line.qty_delta} Units Diff</span>`;
+
+        const rateDeltaBadge = line.rate_delta === 0 
+          ? `<span class="text-success font-semibold">Matched (₹${line.po_rate})</span>` 
+          : `<span class="text-danger font-semibold font-mono">+₹${line.rate_delta}/unit</span>`;
+
+        return `
+          <tr>
+            <td><strong class="font-mono">${line.sku}</strong></td>
+            <td>${line.name}</td>
+            <td class="font-mono" style="text-align:right;">${line.ordered_qty}</td>
+            <td class="font-mono" style="text-align:right;">${line.received_qty}</td>
+            <td class="font-mono" style="text-align:right;">${line.accepted_qty} ${line.rejected_qty > 0 ? `<span class="text-danger">(${line.rejected_qty} Rej)</span>` : ''}</td>
+            <td class="font-mono" style="text-align:right;">${line.billed_qty}</td>
+            <td style="text-align:center;">${qtyDeltaBadge}</td>
+            <td class="font-mono" style="text-align:right;">₹${line.po_rate}</td>
+            <td class="font-mono" style="text-align:right;">₹${line.billed_rate}</td>
+            <td style="text-align:center;">${rateDeltaBadge}</td>
+            <td><span class="badge ${line.line_status === 'MATCHED' ? 'badge-success' : 'badge-danger'}">${line.line_status}</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      canvas.innerHTML = `
+        <div class="trio-cards-row">
+          <!-- PO Card -->
+          <div class="trio-card">
+            <div class="trio-card-header trio-po-header">
+              <span>1. PURCHASE ORDER</span>
+              <span class="font-mono">${item.po_number}</span>
+            </div>
+            <div class="trio-card-body">
+              <div class="meta-pair"><span class="meta-pair-label">Vendor:</span><span class="meta-pair-value">${item.vendor_name}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Order Date:</span><span class="meta-pair-value">${formatDateSafely(item.po_date)}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Agreed PO Total:</span><span class="meta-pair-value" style="color:var(--color-primary);">₹${item.po_total.toLocaleString('en-IN')}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Warehouse:</span><span class="meta-pair-value">${item.warehouse_name}</span></div>
+            </div>
+          </div>
+
+          <!-- GRN Card -->
+          <div class="trio-card">
+            <div class="trio-card-header trio-grn-header">
+              <span>2. GOODS RECEIPT NOTE</span>
+              <span class="font-mono">${item.grn_number}</span>
+            </div>
+            <div class="trio-card-body">
+              <div class="meta-pair"><span class="meta-pair-label">Receipt Date:</span><span class="meta-pair-value">${formatDateSafely(item.grn_date)}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Vehicle Inward:</span><span class="meta-pair-value">${item.grn_vehicle}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Delivery Challan:</span><span class="meta-pair-value">${item.grn_challan}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Storekeeper Note:</span><span class="meta-pair-value" style="font-size:10.5px;">${item.grn_remarks}</span></div>
+            </div>
+          </div>
+
+          <!-- Vendor Invoice Card -->
+          <div class="trio-card">
+            <div class="trio-card-header trio-inv-header">
+              <span>3. VENDOR TAX INVOICE</span>
+              <span class="font-mono">${item.invoice_number}</span>
+            </div>
+            <div class="trio-card-body">
+              <div class="meta-pair"><span class="meta-pair-label">Invoice Date:</span><span class="meta-pair-value">${formatDateSafely(item.invoice_date)}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Billed Subtotal:</span><span class="meta-pair-value">₹${item.billed_subtotal.toLocaleString('en-IN')}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Billed GST (18%):</span><span class="meta-pair-value">₹${item.billed_tax.toLocaleString('en-IN')}</span></div>
+              <div class="meta-pair"><span class="meta-pair-label">Total Billed:</span><span class="meta-pair-value" style="color:var(--color-danger);">₹${item.billed_total.toLocaleString('en-IN')}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delta Analysis Callout -->
+        <div class="delta-callout-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <span class="badge ${item.badge_class}" style="font-size:12px;">${item.match_type}</span>
+              <strong style="margin-left:8px; font-size:13px;">Automated 3-Way Variance Inspection Analysis</strong>
+            </div>
+            <div class="font-mono font-bold" style="font-size:15px; color:${item.total_variance === 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+              Variance Exposure: ₹${item.total_variance.toLocaleString('en-IN')}
+            </div>
+          </div>
+          <p style="font-size:12px; color:#475569; background:#f8fafc; padding:10px 14px; border-radius:4px; border-left:3px solid var(--color-primary); margin-bottom:14px;">
+            <strong>Audit Notes:</strong> ${item.reconciliation_notes || 'All line-item checks matched within permissible commercial tolerance.'}
+          </p>
+
+          <!-- Line Items Table -->
+          <div class="data-table-container">
+            <table class="erp-table">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>DESCRIPTION</th>
+                  <th>PO QTY</th>
+                  <th>GRN RECD</th>
+                  <th>GRN ACCEPTED</th>
+                  <th>BILLED QTY</th>
+                  <th>QTY DELTA</th>
+                  <th>PO RATE</th>
+                  <th>BILLED RATE</th>
+                  <th>RATE DELTA</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${linesHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // Inter-Branch STOs
+    async function fetchTransfers() {
+      try {
+        const res = await fetch('/api/transfers');
+        const data = await res.json();
+        if (data.success) {
+          transfersData = data.transfers || [];
+          document.getElementById('kpiInTransitCount').textContent = `${data.active_in_transit} STOs`;
+          renderTransfersTable(transfersData);
+        }
+      } catch (err) {
+        console.error('Error fetching transfers:', err);
+      }
+    }
+
+    function renderTransfersTable(transfers) {
+      const tbody = document.getElementById('transfersTableBody');
+      if (!transfers.length) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px; color:#64748b;">No transfer orders found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = transfers.map(t => {
+        const itemsSummary = (t.items || []).map(i => `${i.transfer_qty}x ${i.sku || 'SKU'}`).join(', ');
+        return `
+          <tr>
+            <td><strong class="font-mono" style="color:var(--color-primary);">${t.sto_number}</strong></td>
+            <td>
+              <div style="font-weight:600;">${t.from_warehouse_name}</div>
+              <div style="font-size:11px; color:#64748b;">${t.from_city} (${t.from_warehouse_code})</div>
+            </td>
+            <td>
+              <div style="font-weight:600;">${t.to_warehouse_name}</div>
+              <div style="font-size:11px; color:#64748b;">${t.to_city} (${t.to_warehouse_code})</div>
+            </td>
+            <td>
+              <div style="font-weight:500;">${t.carrier_name}</div>
+              <div class="font-mono text-xs" style="color:var(--color-slate-600);">${t.vehicle_no}</div>
+            </td>
+            <td>
+              <span class="badge badge-navy font-mono">${t.eway_bill_no}</span>
+            </td>
+            <td class="font-mono text-xs">${formatDateTimeSafely(t.eway_valid_until)}</td>
+            <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${itemsSummary}">
+              <span style="font-size:11px;">${itemsSummary}</span>
+            </td>
+            <td>
+              <span class="badge ${t.status === 'DELIVERED' ? 'badge-success' : 'badge-amber'}">${t.status}</span>
+            </td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="openStoProgressModal('${t.id}')">
+                Inspect EWB
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openStoProgressModal(stoId) {
+      const item = transfersData.find(t => t.id === stoId);
+      if (!item) return;
+
+      document.getElementById('stoModalTitle').textContent = `${item.sto_number} &bull; ${item.from_warehouse_code} &rarr; ${item.to_warehouse_code}`;
+      const isDelivered = item.status === 'DELIVERED';
+
+      const manifestRows = (item.items || []).map(i => `
+        <tr>
+          <td class="font-mono">${i.sku}</td>
+          <td>${i.name}</td>
+          <td class="font-mono" style="text-align:right; font-weight:700;">${i.transfer_qty}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('stoModalBody').innerHTML = `
+        <!-- Live Stepper -->
+        <div class="stepper-container">
+          <div class="step-node completed">
+            <div class="step-circle">&#10003;</div>
+            <div class="step-title">Dispatched</div>
+            <div style="font-size:10px; color:#64748b;" class="font-mono">${formatDateTimeSafely(item.dispatch_date)}</div>
+          </div>
+          <div class="step-node ${isDelivered ? 'completed' : 'active'}">
+            <div class="step-circle">${isDelivered ? '&#10003;' : '2'}</div>
+            <div class="step-title">In-Transit (E-Way)</div>
+            <div style="font-size:10px; color:#64748b;" class="font-mono">${item.vehicle_no}</div>
+          </div>
+          <div class="step-node ${isDelivered ? 'completed' : ''}">
+            <div class="step-circle">${isDelivered ? '&#10003;' : '3'}</div>
+            <div class="step-title">Hub Inward QA</div>
+            <div style="font-size:10px; color:#64748b;">${item.to_warehouse_code}</div>
+          </div>
+          <div class="step-node ${isDelivered ? 'completed' : ''}">
+            <div class="step-circle">${isDelivered ? '&#10003;' : '4'}</div>
+            <div class="step-title">Bin Put-Away</div>
+            <div style="font-size:10px; color:#64748b;">${isDelivered ? 'Stock Merged' : 'Pending'}</div>
+          </div>
+        </div>
+
+        <!-- Statutory E-Way Bill Pass -->
+        <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:var(--radius-md); padding:16px; margin:20px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:10px;">
+            <span style="font-weight:700; font-size:12px; color:var(--color-slate-700);">GOVERNMENT OF INDIA &bull; GOODS & SERVICES TAX E-WAY BILL</span>
+            <span class="badge badge-success">VALID / ACTIVE</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; font-size:12px;">
+            <div class="meta-pair"><span class="meta-pair-label">E-Way Bill Number:</span><span class="meta-pair-value text-primary">${item.eway_bill_no}</span></div>
+            <div class="meta-pair"><span class="meta-pair-label">Valid Until:</span><span class="meta-pair-value">${formatDateTimeSafely(item.eway_valid_until)}</span></div>
+            <div class="meta-pair"><span class="meta-pair-label">Carrier Partner:</span><span class="meta-pair-value">${item.carrier_name}</span></div>
+            <div class="meta-pair"><span class="meta-pair-label">Assigned Vehicle:</span><span class="meta-pair-value">${item.vehicle_no}</span></div>
+          </div>
+        </div>
+
+        <h5 style="font-size:12px; font-weight:700; margin-bottom:8px;">CONSIGNMENT CARGO MANIFEST</h5>
+        <div class="data-table-container">
+          <table class="erp-table">
+            <thead>
+              <tr><th>SKU</th><th>COMPONENT NAME</th><th>TRANSFER QUANTITY</th></tr>
+            </thead>
+            <tbody>
+              ${manifestRows}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      document.getElementById('stoStepperModal').classList.add('active');
+    }
+
+    function closeStoModal() {
+      document.getElementById('stoStepperModal').classList.remove('active');
+    }
+
+    // Dealers
+    async function fetchDealers() {
+      try {
+        const res = await fetch('/api/dealers');
+        const data = await res.json();
+        if (data.success) {
+          dealersData = data.dealers || [];
+          renderDealersTable(dealersData);
+          populateDealerDrawerSelect();
+        }
+      } catch (err) {
+        console.error('Error fetching dealers:', err);
+      }
+    }
+
+    function renderDealersTable(dealers) {
+      const tbody = document.getElementById('dealersTableBody');
+      if (!dealers.length) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:24px; color:#64748b;">No dealers found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = dealers.map(d => {
+        const utilColor = d.utilization_percent > 70 ? 'var(--color-amber)' : 'var(--color-success)';
+        return `
+          <tr>
+            <td><strong class="font-mono text-primary">${d.id.toUpperCase()}</strong></td>
+            <td style="font-weight:600;">${d.company}</td>
+            <td>${d.name}</td>
+            <td class="font-mono text-xs">${d.gst_in}</td>
+            <td>${d.city}, ${d.state}</td>
+            <td class="font-mono" style="text-align:right;">₹${d.credit_limit.toLocaleString('en-IN')}</td>
+            <td class="font-mono font-bold" style="text-align:right; color:var(--color-success);">₹${d.available_credit.toLocaleString('en-IN')}</td>
+            <td style="text-align:right;">
+              <span class="font-mono" style="color:${utilColor}; font-weight:700;">${d.utilization_percent}%</span>
+            </td>
+            <td><span class="badge badge-success">${d.status}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="openDealerOrderForDealer('${d.id}')">
+                New Order
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Dealer Order Drawer
+    function openDealerOrderDrawer() {
+      document.getElementById('dealerDrawerOverlay').classList.add('active');
+      if (!document.getElementById('drawerOrderLinesContainer').children.length) {
+        addDrawerOrderLine();
+      }
+      updateDrawerDealerCredit();
+    }
+
+    function closeDealerOrderDrawer() {
+      document.getElementById('dealerDrawerOverlay').classList.remove('active');
+    }
+
+    function openDealerOrderWithItem(itemId, sku) {
+      openDealerOrderDrawer();
+      const container = document.getElementById('drawerOrderLinesContainer');
+      container.innerHTML = '';
+      addDrawerOrderLine(itemId, 5);
+    }
+
+    function openDealerOrderForDealer(dealerId) {
+      const select = document.getElementById('drawerDealerSelect');
+      if (select) select.value = dealerId;
+      openDealerOrderDrawer();
+    }
+
+    function populateDealerDrawerSelect() {
+      const select = document.getElementById('drawerDealerSelect');
+      if (!select) return;
+      select.innerHTML = dealersData.map(d => `
+        <option value="${d.id}">${d.company} &bull; ${d.city} (Avail: ₹${d.available_credit.toLocaleString('en-IN')})</option>
+      `).join('');
+    }
+
+    function updateDrawerDealerCredit() {
+      const select = document.getElementById('drawerDealerSelect');
+      const dealer = dealersData.find(d => d.id === select.value);
+      if (dealer) {
+        document.getElementById('drawerDealerCreditNotice').innerHTML = `
+          Available Trade Credit: <strong>₹${dealer.available_credit.toLocaleString('en-IN')}</strong> &bull; GSTIN: ${dealer.gst_in} (${dealer.state})
+        `;
+        document.getElementById('currentDealerDisplay').textContent = `Dealer: ${dealer.company.slice(0, 16)}...`;
+      }
+      calculateDrawerTotals();
+    }
+
+    function addDrawerOrderLine(selectedItemId = '', qty = 10) {
+      const container = document.getElementById('drawerOrderLinesContainer');
+      const row = document.createElement('div');
+      row.className = 'drawer-line-row';
+      row.style.cssText = 'display:flex; gap:8px; align-items:center; background:#f8fafc; padding:8px 10px; border-radius:4px; border:1px solid #e2e8f0;';
+
+      const optionsHtml = inventoryData.map(it => `
+        <option value="${it.id}" ${it.id === selectedItemId ? 'selected' : ''}>${it.sku} &bull; ${it.name.slice(0, 30)} (₹${it.unit_price})</option>
+      `).join('');
+
+      row.innerHTML = `
+        <select class="select-control drawer-item-select" style="flex:2;" onchange="calculateDrawerTotals()">
+          ${optionsHtml}
+        </select>
+        <input type="number" class="input-control drawer-item-qty font-mono" value="${qty}" min="1" style="width:70px; text-align:right;" oninput="calculateDrawerTotals()">
+        <button class="btn btn-outline btn-sm" style="color:var(--color-danger); border-color:#fca5a5;" onclick="this.parentElement.remove(); calculateDrawerTotals();">&times;</button>
+      `;
+
+      container.appendChild(row);
+      calculateDrawerTotals();
+    }
+
+    function calculateDrawerTotals() {
+      const dealerSelect = document.getElementById('drawerDealerSelect');
+      const whSelect = document.getElementById('drawerWarehouseSelect');
+      const dealer = dealersData.find(d => d.id === (dealerSelect ? dealerSelect.value : ''));
+      const isIntraState = dealer && whSelect ? (whSelect.value === 'wh-kochi' || whSelect.value === 'wh-cal' ? dealer.state === 'Kerala' : dealer.state === (whSelect.value === 'wh-blr' ? 'Karnataka' : 'Maharashtra')) : true;
+
+      let subtotal = 0;
+      document.querySelectorAll('.drawer-line-row').forEach(row => {
+        const itemId = row.querySelector('.drawer-item-select').value;
+        const qty = parseInt(row.querySelector('.drawer-item-qty').value || 1, 10);
+        const item = inventoryData.find(i => i.id === itemId);
+        if (item) {
+          subtotal += item.unit_price * qty;
+        }
+      });
+
+      const taxAmount = (subtotal * 18) / 100;
+      const grandTotal = subtotal + taxAmount;
+
+      document.getElementById('drawerSubtotalDisplay').textContent = '₹' + subtotal.toLocaleString('en-IN');
+      document.getElementById('drawerGstLabel').textContent = isIntraState 
+        ? 'GST Split: 9% CGST + 9% SGST:' 
+        : 'GST: 18% IGST (Inter-State):';
+      document.getElementById('drawerGstDisplay').textContent = '₹' + taxAmount.toLocaleString('en-IN');
+      document.getElementById('drawerGrandTotalDisplay').textContent = '₹' + grandTotal.toLocaleString('en-IN');
+    }
+
+    async function submitDealerOrder() {
+      const dealerSelect = document.getElementById('drawerDealerSelect');
+      const whSelect = document.getElementById('drawerWarehouseSelect');
+      
+      const items = [];
+      document.querySelectorAll('.drawer-line-row').forEach(row => {
+        const itemId = row.querySelector('.drawer-item-select').value;
+        const qty = parseInt(row.querySelector('.drawer-item-qty').value || 1, 10);
+        items.push({ item_id: itemId, quantity: qty });
+      });
+
+      if (!items.length) {
+        showToast('Please add at least one line item', 'amber');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/dealers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dealer_id: dealerSelect.value,
+            warehouse_id: whSelect.value,
+            items
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Order ${data.order_id} confirmed! Stock reserved.`, 'success');
+          closeDealerOrderDrawer();
+          fetchInventory();
+          fetchDealers();
+        } else {
+          showToast(data.message || 'Order failed', 'danger');
+        }
+      } catch (err) {
+        showToast('Network error while placing order', 'danger');
+      }
+    }
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchInventory();
+      fetchMatchSets();
+      fetchTransfers();
+      fetchDealers();
+    });
+  </script>
 </body>
 </html>

@@ -1,17 +1,91 @@
 version: '3.8'
+
+# ==============================================================================
+# Multi-Track Self-Hosted Architecture: Frappe ERPNext v15 & Odoo 17 Enterprise
+# Multi-Branch Inventory, GST 3-Way Match & B2B Dealer Order Fulfillment Stack
+# ==============================================================================
+
 services:
-  app:
+  erpnext-frontend:
     image: frappe/erpnext:v15.40.0
+    container_name: tpl_lerp_erpnext_app
     restart: unless-stopped
     ports:
       - "8080:8000"
     environment:
       - BRAND_NAME=NEXUS SUPPLY ERP
-      - PRIMARY_COLOR=#4F46E5
+      - PRIMARY_COLOR=#2563EB
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=tpl_lerp_warehouse_erp
+      - REDIS_CACHE=redis://redis-cache:6379
+      - REDIS_QUEUE=redis://redis-queue:6379
+      - SITES=nexus-supply.local
+    depends_on:
+      - db
+      - redis-cache
+      - redis-queue
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - logs-vol:/home/frappe/frappe-bench/logs
+    networks:
+      - erp-network
+
+  odoo-track:
+    image: odoo:17.0
+    container_name: tpl_lerp_odoo_track
+    restart: unless-stopped
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=db
+      - USER=bmad
+      - PASSWORD=bmad_secret
+    depends_on:
+      - db
+    volumes:
+      - odoo-data:/var/lib/odoo
+    networks:
+      - erp-network
+
   db:
     image: postgres:15-alpine
+    container_name: tpl_lerp_postgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=bmad
       - POSTGRES_PASSWORD=bmad_secret
       - POSTGRES_DB=tpl_lerp_warehouse_erp
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - erp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bmad -d tpl_lerp_warehouse_erp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-cache:
+    image: redis:7-alpine
+    container_name: tpl_lerp_redis_cache
+    restart: unless-stopped
+    networks:
+      - erp-network
+
+  redis-queue:
+    image: redis:7-alpine
+    container_name: tpl_lerp_redis_queue
+    restart: unless-stopped
+    networks:
+      - erp-network
+
+volumes:
+  pg-data:
+  sites-vol:
+  logs-vol:
+  odoo-data:
+
+networks:
+  erp-network:
+    driver: bridge

@@ -2,18 +2,1271 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title data-wl-brand>KRONOS ERP // Inter-Branch Stock Transfers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-wl-brand>NEXUS SUPPLY ERP — Enterprise Operations & Material Console</title>
+
+  <!-- High-Density Enterprise Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="theme-tokens.css">
   <script src="whitelabel.js"></script>
+
   <style>
-    body { background: #0F172A; color: #FFF; font-family: monospace; padding: 24px; }
+    /* Movement Q: Enterprise Operations Console Blueprint */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--bg-main, #f1f5f9);
+    }
+
+    /* Admin Console Header */
+    .admin-header {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-badge-indicator {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+    }
+
+    /* Top Command Ribbon */
+    .admin-kpi-ribbon {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 24px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .admin-kpi-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      background: #f8fafc;
+      transition: all 0.15s ease;
+    }
+
+    .admin-kpi-card:hover {
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-kpi-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-slate-500);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-kpi-metric {
+      font-size: 20px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--color-slate-900);
+    }
+
+    /* Main Console Workspace */
+    .admin-workspace {
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Operation Actions Bar */
+    .ops-quick-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Admin Tabs */
+    .admin-nav-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border-color);
+      gap: 4px;
+    }
+
+    .admin-tab-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-slate-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      transition: color 0.15s ease;
+    }
+
+    .admin-tab-btn:hover {
+      color: var(--color-primary);
+    }
+
+    .admin-tab-btn.active {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    .admin-tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-primary);
+    }
+
+    .admin-tab-panel {
+      display: none;
+    }
+
+    .admin-tab-panel.active {
+      display: block;
+    }
+
+    /* 3-Way Match Review Cards */
+    .reconciliation-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .match-audit-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .match-audit-header {
+      padding: 14px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .match-audit-body {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .match-columns-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      background: #f1f5f9;
+      padding: 12px;
+      border-radius: var(--radius);
+    }
+
+    .match-col-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .audit-action-cluster {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 992px) {
+      .admin-kpi-ribbon { grid-template-columns: repeat(2, 1fr); }
+      .match-columns-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body data-layout-archetype="financial-erp-admin">
-  <h2><span data-wl-brand>KRONOS ERP</span> — E-Way Bill & Inter-Branch Stock Journal</h2>
-  <div style="background:#1E293B; padding:18px; margin-top:20px;">
-    <div>STOCK TRANSFER: WH-01 (MUMBAI) &rarr; WH-02 (BANGALORE)</div>
-    <div style="color:#38BDF8; margin-top:4px;">● E-WAY BILL GENERATED: #EWB-88192841</div>
+<body data-layout-archetype="enterprise-ops-console">
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="admin-brand">
+      <span class="admin-badge-indicator">OPS-CONSOLE</span>
+      <div>
+        <strong style="font-size:15px; letter-spacing:-0.01em;" data-wl-brand>NEXUS SUPPLY ERP</strong>
+        <span style="font-size:11px; color:#94a3b8; margin-left:8px;">Command Center & Multi-Branch Ledger</span>
+      </div>
+    </div>
+    
+    <div style="display:flex; align-items:center; gap:14px;">
+      <a href="index.html" class="btn btn-outline btn-sm" style="color:#ffffff; border-color:#475569; background:#1e293b;">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Customer & Dealer Portal
+      </a>
+      <button class="btn btn-primary btn-sm" onclick="openWhitelabelModal()">
+        Personalize Whitelabel
+      </button>
+    </div>
+  </header>
+
+  <!-- Top Operator Command Ribbon -->
+  <section class="admin-kpi-ribbon">
+    <div class="admin-kpi-card">
+      <div class="admin-kpi-title">
+        <span>Total Stock Valuation</span>
+        <span class="badge badge-neutral">INR</span>
+      </div>
+      <div class="admin-kpi-metric" id="adminKpiTotalVal">₹12,48,200</div>
+      <div style="font-size:11px; color:#64748b; margin-top:2px;">Audited FIFO Cost Base</div>
+    </div>
+
+    <div class="admin-kpi-card">
+      <div class="admin-kpi-title">
+        <span>Active Logistics Facilities</span>
+        <span class="badge badge-primary">Hubs</span>
+      </div>
+      <div class="admin-kpi-metric" id="adminKpiHubsCount">4 Hubs</div>
+      <div style="font-size:11px; color:#64748b; margin-top:2px;">Kochi / BLR / BOM / Calicut</div>
+    </div>
+
+    <div class="admin-kpi-card">
+      <div class="admin-kpi-title">
+        <span>3-Way Match Invoices</span>
+        <span class="badge badge-amber" id="adminKpiPendingBadge">3 Pending</span>
+      </div>
+      <div class="admin-kpi-metric text-amber" id="adminKpiPendingCount">3 Cases</div>
+      <div style="font-size:11px; color:#64748b; margin-top:2px;">Variance Investigation Required</div>
+    </div>
+
+    <div class="admin-kpi-card">
+      <div class="admin-kpi-title">
+        <span>In-Transit STOs</span>
+        <span class="badge badge-success">E-Way Active</span>
+      </div>
+      <div class="admin-kpi-metric text-success" id="adminKpiTransitCount">2 Dispatched</div>
+      <div style="font-size:11px; color:#64748b; margin-top:2px;">National Highway Cargo</div>
+    </div>
+
+    <div class="admin-kpi-card">
+      <div class="admin-kpi-title">
+        <span>Low-Stock Alerts</span>
+        <span class="badge badge-danger" id="adminKpiLowStockBadge">2 SKUs</span>
+      </div>
+      <div class="admin-kpi-metric text-danger" id="adminKpiLowStockCount">2 Items</div>
+      <div style="font-size:11px; color:#64748b; margin-top:2px;">Safety Stock Breach</div>
+    </div>
+  </section>
+
+  <!-- Workspace Container -->
+  <main class="admin-workspace">
+
+    <!-- Ops Quick Action Bar -->
+    <div class="ops-quick-bar">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:12px; font-weight:700; color:var(--color-slate-700);">OPERATOR ACTIONS:</span>
+        <button class="btn btn-outline btn-sm" onclick="openCycleAdjustmentModal()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          1-Click Cycle Count Adjustment
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="openNewStoModal()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+          Dispatch Inter-Branch STO
+        </button>
+        <button class="btn btn-outline btn-sm" style="color:var(--color-primary); border-color:#93c5fd;" onclick="triggerAutoPOReplenishment()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          Batch Auto-PO Replenishment
+        </button>
+      </div>
+
+      <div style="font-size:11.5px; color:#64748b;">
+        Session: <strong class="font-mono text-dark">OPS-LEAD-KOCHI</strong> &bull; Node: <strong class="font-mono text-dark">BOM-01-PRIMARY</strong>
+      </div>
+    </div>
+
+    <!-- Admin Navigation Tabs -->
+    <nav class="admin-nav-tabs">
+      <button class="admin-tab-btn active" onclick="switchAdminTab('reconcile')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        3-Way Match Reconciliation Center
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('stock')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+        Multi-Branch Stock Ledger & Adjustments
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('transfers')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+        STO Dispatch & E-Way Bill Generator
+      </button>
+      <button class="admin-tab-btn" onclick="switchAdminTab('po')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+        Purchase Orders & Replenishment
+      </button>
+    </nav>
+
+    <!-- TAB 1: 3-Way Match Reconciliation Center -->
+    <section id="admin-tab-reconcile" class="admin-tab-panel active">
+      <div style="margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 style="font-size:16px; font-weight:700;">Purchase Order &bull; GRN Receipt &bull; Vendor Invoice Reconciliation</h3>
+          <p style="font-size:12px; color:var(--color-slate-500);">Review automated price and quantity delta calculations, issue vendor debit/credit notes, or approve disbursement.</p>
+        </div>
+        <span class="badge badge-primary font-mono">AUTOMATED AUDIT ACTIVE</span>
+      </div>
+
+      <div class="reconciliation-stack" id="reconciliationCardsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 2: Multi-Branch Stock Matrix & Cycle Count Adjustment -->
+    <section id="admin-tab-stock" class="admin-tab-panel">
+      <div class="data-filter-bar">
+        <div class="filter-group">
+          <label style="font-size:12px; font-weight:600; color:var(--color-slate-700);">Filter Warehouse:</label>
+          <select id="adminWarehouseSelect" class="select-control" style="width:240px;" onchange="loadAdminInventory()">
+            <option value="all">All Hubs (Multi-Branch Consolidated)</option>
+            <option value="wh-kochi">WH-01 Kochi Port Logistics Hub</option>
+            <option value="wh-blr">WH-02 Bangalore North Industrial Hub</option>
+            <option value="wh-bom">WH-03 Mumbai JNPT Freight Terminal</option>
+            <option value="wh-cal">WH-04 Calicut Supply Depot</option>
+          </select>
+          <input type="text" id="adminInventorySearch" class="input-control" placeholder="Search SKU, name, HSN..." style="width:220px;" oninput="filterAdminInventory()">
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm" onclick="openCycleAdjustmentModal()">
+            + Stock Adjustment (Physical Count)
+          </button>
+        </div>
+      </div>
+
+      <div class="data-table-container">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>SKU / CODE</th>
+              <th>MATERIAL SPECIFICATION</th>
+              <th>CATEGORY</th>
+              <th>HSN</th>
+              <th>SAFETY STOCK</th>
+              <th>ON-HAND</th>
+              <th>RESERVED</th>
+              <th>IN-TRANSIT</th>
+              <th>AVAILABLE</th>
+              <th>UNIT COST</th>
+              <th>STOCK VALUE</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="adminInventoryTableBody">
+            <tr><td colspan="12" style="text-align:center; padding:24px; color:#64748b;">Loading stock matrix...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: STO Dispatch & E-Way Bill Console -->
+    <section id="admin-tab-transfers" class="admin-tab-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <h3 style="font-size:16px; font-weight:700;">Inter-Branch Stock Transfer (STO) Dispatch Console</h3>
+          <p style="font-size:12px; color:var(--color-slate-500);">Move inventory between hubs with real-time 12-digit Indian E-Way Bill generation.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openNewStoModal()">
+          + Create Dispatch Consignment
+        </button>
+      </div>
+
+      <div class="data-table-container">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>STO REF</th>
+              <th>SOURCE WAREHOUSE</th>
+              <th>DESTINATION WAREHOUSE</th>
+              <th>CARRIER</th>
+              <th>VEHICLE NO</th>
+              <th>12-DIGIT E-WAY BILL</th>
+              <th>VALID UNTIL</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="adminTransfersTableBody">
+            <tr><td colspan="9" style="text-align:center; padding:24px; color:#64748b;">Loading transfers...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 4: Purchase Orders & Replenishment -->
+    <section id="admin-tab-po" class="admin-tab-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <h3 style="font-size:16px; font-weight:700;">Purchase Orders & Supplier Replenishment</h3>
+          <p style="font-size:12px; color:var(--color-slate-500);">Commercial procurement orders, tax invoices, and safety stock replenishment.</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="triggerAutoPOReplenishment()">Run Auto-PO Replenishment</button>
+          <button class="btn btn-primary btn-sm" onclick="openNewPoModal()">+ Issue Manual PO</button>
+        </div>
+      </div>
+
+      <div class="data-table-container">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>PO NUMBER</th>
+              <th>SUPPLIER / VENDOR</th>
+              <th>VENDOR GSTIN</th>
+              <th>DESTINATION HUB</th>
+              <th>ORDER DATE</th>
+              <th>EXPECTED DELIVERY</th>
+              <th>SUBTOTAL</th>
+              <th>GST TAX</th>
+              <th>TOTAL VALUE</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="adminPoTableBody">
+            <tr><td colspan="10" style="text-align:center; padding:24px; color:#64748b;">Loading purchase orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Cycle Count Stock Adjustment Modal -->
+  <div class="modal-overlay" id="cycleAdjustmentModal">
+    <div class="modal-card" style="max-width:560px;">
+      <div class="modal-header">
+        <h4 style="font-size:14px; font-weight:700;">Record Physical Cycle Count Adjustment</h4>
+        <button onclick="closeCycleModal()" style="background:transparent; border:none; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">LOGISTICS HUB / WAREHOUSE</label>
+          <select id="adjWarehouseSelect" class="select-control">
+            <option value="wh-kochi">WH-01 Kochi Port Logistics Hub</option>
+            <option value="wh-blr">WH-02 Bangalore North Industrial Hub</option>
+            <option value="wh-bom">WH-03 Mumbai JNPT Freight Terminal</option>
+            <option value="wh-cal">WH-04 Calicut Supply Depot</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">INVENTORY SKU COMPONENT</label>
+          <select id="adjItemSelect" class="select-control">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">ADJUSTMENT QUANTITY DELTA (+ / - UNITS)</label>
+          <input type="number" id="adjQtyInput" class="input-control font-mono" placeholder="e.g. +10 or -5" value="5">
+          <span style="font-size:11px; color:#64748b;">Positive numbers increase on-hand stock; negative numbers record loss/scrap.</span>
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">REASON FOR VARIANCE</label>
+          <select id="adjReasonSelect" class="select-control">
+            <option value="CYCLE_COUNT_AUDIT">Periodic Cycle Count Discrepancy</option>
+            <option value="IN_TRANSIT_DAMAGE">Transit / Handling Damaged Scrap</option>
+            <option value="FOUND_IN_BIN">Found Untracked Goods in Bin</option>
+            <option value="CUSTOMER_RETURN_RESTOCK">Authorized B2B Customer Restock</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">AUDIT REMARKS & OPERATOR NOTES</label>
+          <input type="text" id="adjNoteInput" class="input-control" placeholder="Verified by Storekeeper on physical count sheet" value="Physical count discrepancy verified during weekly aisle audit">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeCycleModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitStockAdjustment()">Apply Ledger Adjustment</button>
+      </div>
+    </div>
   </div>
+
+  <!-- New STO Dispatch Modal -->
+  <div class="modal-overlay" id="newStoModal">
+    <div class="modal-card" style="max-width:620px;">
+      <div class="modal-header">
+        <h4 style="font-size:14px; font-weight:700;">Dispatch Inter-Branch Stock Transfer (STO)</h4>
+        <button onclick="closeStoModal()" style="background:transparent; border:none; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">SOURCE WAREHOUSE (ORIGIN)</label>
+            <select id="stoFromWhSelect" class="select-control">
+              <option value="wh-kochi">WH-01 Kochi Port Hub (Kerala)</option>
+              <option value="wh-blr">WH-02 Bangalore North Hub (Karnataka)</option>
+              <option value="wh-bom">WH-03 Mumbai JNPT (Maharashtra)</option>
+              <option value="wh-cal">WH-04 Calicut Depot (Kerala)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">DESTINATION WAREHOUSE</label>
+            <select id="stoToWhSelect" class="select-control">
+              <option value="wh-cal">WH-04 Calicut Depot (Kerala)</option>
+              <option value="wh-blr">WH-02 Bangalore North Hub (Karnataka)</option>
+              <option value="wh-kochi">WH-01 Kochi Port Hub (Kerala)</option>
+              <option value="wh-bom">WH-03 Mumbai JNPT (Maharashtra)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">CARRIER PARTNER</label>
+            <input type="text" id="stoCarrierInput" class="input-control" value="SafeXpress Logistics Cargo Ltd">
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">TRUCK VEHICLE REGISTRATION</label>
+            <input type="text" id="stoVehicleInput" class="input-control font-mono" value="KL-07-CD-4419">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">TRANSFER SKU</label>
+          <select id="stoItemSelect" class="select-control">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">TRANSFER QUANTITY</label>
+          <input type="number" id="stoQtyInput" class="input-control font-mono" value="15" min="1">
+        </div>
+
+        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:4px; padding:10px 14px; font-size:11.5px; color:#0369a1;">
+          <strong>Statutory E-Way Bill Notice:</strong> A 12-digit Indian E-Way Bill format (<code class="font-mono">2410-XXXX-XXXX</code>) with 72-hour validity will be auto-generated upon dispatch.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeStoModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitStockTransfer()">Generate E-Way Bill & Dispatch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manual PO Modal -->
+  <div class="modal-overlay" id="newPoModal">
+    <div class="modal-card" style="max-width:580px;">
+      <div class="modal-header">
+        <h4 style="font-size:14px; font-weight:700;">Issue New Purchase Order (PO)</h4>
+        <button onclick="closePoModal()" style="background:transparent; border:none; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">VENDOR / SUPPLIER NAME</label>
+          <input type="text" id="poVendorName" class="input-control" value="Bharat Fasteners & Alloys Ltd">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">VENDOR GSTIN</label>
+            <input type="text" id="poVendorGst" class="input-control font-mono" value="27AABCB9988D1Z2">
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">RECEIVING HUB</label>
+            <select id="poWarehouseSelect" class="select-control">
+              <option value="wh-kochi">WH-01 Kochi Port Hub</option>
+              <option value="wh-blr">WH-02 Bangalore North Hub</option>
+              <option value="wh-bom">WH-03 Mumbai JNPT</option>
+              <option value="wh-cal">WH-04 Calicut Depot</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:12px;">
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">PROCUREMENT SKU</label>
+            <select id="poItemSelect" class="select-control"></select>
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">ORDER QUANTITY</label>
+            <input type="number" id="poQtyInput" class="input-control font-mono" value="50" min="1">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closePoModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitManualPo()">Issue Purchase Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Whitelabel Customizer Modal -->
+  <div class="modal-overlay" id="whitelabelModal">
+    <div class="modal-card" style="max-width:540px;">
+      <div class="modal-header">
+        <h4 style="font-size:14px; font-weight:700;">Personalize Whitelabel Branding</h4>
+        <button onclick="closeWhitelabelModal()" style="background:transparent; border:none; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:14px;">
+        <p style="font-size:12px; color:var(--color-slate-500);">Customize brand appearance, primary enterprise color tokens, and contact numbers across customer and ops views.</p>
+        
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">BRAND NAME</label>
+          <input type="text" id="adminWlBrandInput" class="input-control" value="NEXUS SUPPLY ERP">
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">TAGLINE</label>
+          <input type="text" id="adminWlTaglineInput" class="input-control" value="Multi-Branch Inventory & 3-Way Match ERP">
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">PRIMARY ACCENT COLOR (HEX)</label>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input type="color" id="adminWlColorPicker" value="#2563eb" style="width:40px; height:34px; padding:0; border:1px solid #cbd5e1; border-radius:4px; cursor:pointer;" onchange="document.getElementById('adminWlColorHex').value = this.value">
+            <input type="text" id="adminWlColorHex" class="input-control font-mono" value="#2563eb" style="flex:1;">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--color-slate-600); display:block; margin-bottom:4px;">WHATSAPP TRADE DESK NUMBER</label>
+          <input type="text" id="adminWaInput" class="input-control font-mono" value="919847011223" data-wl-wa>
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid var(--border-color); border-radius:4px; padding:12px;">
+          <div style="font-size:11px; font-weight:600; color:#64748b; margin-bottom:4px;">SHOWROOM SHAREABLE LINK</div>
+          <input type="text" id="shareableLinkPreview" class="input-control font-mono text-xs" readonly>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="resetWhitelabelDefaults()">Reset to Defaults</button>
+        <button class="btn btn-primary" onclick="applyWhitelabelSettings()">Apply & Copy Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Hub -->
+  <div class="toast-container" id="adminToastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="erp-footer">
+    <div>
+      <strong data-wl-brand>NEXUS SUPPLY ERP</strong> &bull; Movement Q: Enterprise Operations Console
+    </div>
+    <div>
+      SAP Fiori / ERPNext v15 Standard &bull; Safe V8 Freeze Execution Guard &bull; Cloudflare Pages D1
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    let adminInventory = [];
+    let adminMatchSets = [];
+    let adminTransfers = [];
+    let adminPOs = [];
+
+    // Defensive date guard
+    function formatDateSafely(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime()) || d.getFullYear() < 2024) {
+          return new Date().toISOString().split('T')[0];
+        }
+        return d.toISOString().split('T')[0];
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function formatDateTimeSafely(dateTimeStr) {
+      if (!dateTimeStr) return 'N/A';
+      try {
+        const d = new Date(dateTimeStr);
+        if (isNaN(d.getTime()) || d.getFullYear() < 2024) {
+          return new Date().toISOString().replace('T', ' ').substring(0, 16);
+        }
+        return d.toISOString().replace('T', ' ').substring(0, 16);
+      } catch (e) {
+        return dateTimeStr;
+      }
+    }
+
+    function showAdminToast(message, type = 'info') {
+      const container = document.getElementById('adminToastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
+
+      const targetBtn = Array.from(document.querySelectorAll('.admin-tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (targetBtn) targetBtn.classList.add('active');
+
+      const targetPanel = document.getElementById('admin-tab-' + tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+    }
+
+    // Load All Data
+    async function loadAllAdminData() {
+      await Promise.all([
+        loadAdminInventory(),
+        loadAdminMatchSets(),
+        loadAdminTransfers(),
+        loadAdminPOs()
+      ]);
+      populateModalItemSelectors();
+    }
+
+    // Inventory
+    async function loadAdminInventory() {
+      const wh = document.getElementById('adminWarehouseSelect').value;
+      try {
+        const res = await fetch(`/api/inventory?warehouse_id=${encodeURIComponent(wh)}`);
+        const data = await res.json();
+        if (data.success) {
+          adminInventory = data.items || [];
+          document.getElementById('adminKpiTotalVal').textContent = '₹' + (data.total_stock_value || 0).toLocaleString('en-IN');
+          document.getElementById('adminKpiLowStockCount').textContent = `${data.low_stock_alerts} SKUs`;
+          document.getElementById('adminKpiLowStockBadge').textContent = `${data.low_stock_alerts} Low Stock`;
+          renderAdminInventory(adminInventory);
+        }
+      } catch (err) {
+        console.error('Error loading inventory:', err);
+      }
+    }
+
+    function filterAdminInventory() {
+      const q = (document.getElementById('adminInventorySearch').value || '').trim().toLowerCase();
+      const filtered = adminInventory.filter(it => {
+        if (!q) return true;
+        return it.sku.toLowerCase().includes(q) || it.name.toLowerCase().includes(q) || it.hsn_code.includes(q);
+      });
+      renderAdminInventory(filtered);
+    }
+
+    function renderAdminInventory(items) {
+      const tbody = document.getElementById('adminInventoryTableBody');
+      if (!items.length) {
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:24px; color:#64748b;">No inventory matches.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = items.map(it => {
+        const isLow = it.is_low_stock;
+        return `
+          <tr class="${isLow ? 'row-alert' : ''}">
+            <td><strong class="font-mono text-primary">${it.sku}</strong></td>
+            <td>
+              <div style="font-weight:600;">${it.name}</div>
+              <div style="font-size:11px; color:#64748b;">UOM: ${it.uom}</div>
+            </td>
+            <td><span class="badge badge-neutral">${it.category}</span></td>
+            <td class="font-mono text-xs">${it.hsn_code}</td>
+            <td class="font-mono" style="text-align:right;">${it.safety_stock}</td>
+            <td class="font-mono font-bold" style="text-align:right; color:${isLow ? 'var(--color-danger)' : 'inherit'};">${it.total_on_hand}</td>
+            <td class="font-mono text-muted" style="text-align:right;">${it.total_reserved}</td>
+            <td class="font-mono text-muted" style="text-align:right;">${it.total_in_transit}</td>
+            <td class="font-mono font-bold" style="text-align:right;">${it.total_available}</td>
+            <td class="font-mono" style="text-align:right;">₹${it.unit_cost.toLocaleString('en-IN')}</td>
+            <td class="font-mono" style="text-align:right;">₹${it.total_value.toLocaleString('en-IN')}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="openCycleAdjustmentModalForItem('${it.id}')">
+                Adjust
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 3-Way Match
+    async function loadAdminMatchSets() {
+      try {
+        const res = await fetch('/api/match');
+        const data = await res.json();
+        if (data.success) {
+          adminMatchSets = data.match_sets || [];
+          document.getElementById('adminKpiPendingCount').textContent = `${data.pending_variance_count} Cases`;
+          document.getElementById('adminKpiPendingBadge').textContent = `${data.pending_variance_count} Pending`;
+          renderAdminMatchCards(adminMatchSets);
+        }
+      } catch (err) {
+        console.error('Error loading match sets:', err);
+      }
+    }
+
+    function renderAdminMatchCards(matchSets) {
+      const container = document.getElementById('reconciliationCardsContainer');
+      if (!matchSets.length) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; background:#fff; border:1px solid var(--border-color); border-radius:6px; color:#64748b;">No match cases available.</div>`;
+        return;
+      }
+
+      container.innerHTML = matchSets.map(m => {
+        const isApproved = m.status === 'APPROVED' || m.status === 'MATCHED_APPROVED';
+        const isHold = m.status === 'AUDIT_HOLD';
+        const isCreditRequested = m.status === 'CREDIT_NOTE_REQUESTED';
+
+        const linesRows = m.lines.map(l => `
+          <tr>
+            <td class="font-mono"><strong>${l.sku}</strong></td>
+            <td>${l.name}</td>
+            <td class="font-mono" style="text-align:right;">${l.ordered_qty}</td>
+            <td class="font-mono" style="text-align:right;">${l.accepted_qty} ${l.rejected_qty > 0 ? `<span class="text-danger">(${l.rejected_qty} Rej)</span>` : ''}</td>
+            <td class="font-mono" style="text-align:right;">${l.billed_qty}</td>
+            <td class="font-mono" style="text-align:right; font-weight:700; color:${l.qty_delta !== 0 ? 'var(--color-danger)' : 'var(--color-success)'};">
+              ${l.qty_delta === 0 ? '0' : (l.qty_delta > 0 ? '+' : '') + l.qty_delta}
+            </td>
+            <td class="font-mono" style="text-align:right;">₹${l.po_rate}</td>
+            <td class="font-mono" style="text-align:right;">₹${l.billed_rate}</td>
+            <td class="font-mono" style="text-align:right; font-weight:700; color:${l.rate_delta !== 0 ? 'var(--color-danger)' : 'var(--color-success)'};">
+              ${l.rate_delta === 0 ? '₹0' : '+₹' + l.rate_delta}
+            </td>
+            <td><span class="badge ${l.line_status === 'MATCHED' ? 'badge-success' : 'badge-danger'}">${l.line_status}</span></td>
+          </tr>
+        `).join('');
+
+        return `
+          <div class="match-audit-card">
+            <div class="match-audit-header">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <strong class="font-mono" style="font-size:13px; color:var(--color-primary);">${m.invoice_number}</strong>
+                <span class="badge ${m.badge_class}">${m.match_type}</span>
+                <span style="font-size:12px; color:#475569;">Vendor: <strong>${m.vendor_name}</strong></span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="font-mono" style="font-size:13px; font-weight:700; color:${m.total_variance === 0 ? 'var(--color-success)' : 'var(--color-danger)'};">
+                  Total Delta: ${m.total_variance > 0 ? '+' : ''}₹${m.total_variance.toLocaleString('en-IN')}
+                </span>
+                <div class="audit-action-cluster">
+                  <button class="btn btn-success btn-sm" onclick="reconcileInvoice('${m.match_id}', 'APPROVE')" ${isApproved ? 'disabled' : ''}>
+                    ${isApproved ? '&#10003; Approved' : 'Approve Disbursement'}
+                  </button>
+                  <button class="btn btn-amber btn-sm" onclick="reconcileInvoice('${m.match_id}', 'CREDIT_NOTE')" ${isCreditRequested ? 'disabled' : ''}>
+                    ${isCreditRequested ? 'Credit Note Req.' : 'Request Credit Note'}
+                  </button>
+                  <button class="btn btn-danger btn-sm" onclick="reconcileInvoice('${m.match_id}', 'AUDIT_HOLD')" ${isHold ? 'disabled' : ''}>
+                    ${isHold ? 'On Audit Hold' : 'Audit Hold'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="match-audit-body">
+              <div class="match-columns-grid">
+                <div class="match-col-box">
+                  <div style="font-size:11px; font-weight:700; color:#166534; margin-bottom:6px;">1. PURCHASE ORDER REF</div>
+                  <div class="meta-pair"><span class="meta-pair-label">PO Ref:</span><span class="meta-pair-value">${m.po_number}</span></div>
+                  <div class="meta-pair"><span class="meta-pair-label">Hub:</span><span class="meta-pair-value">${m.warehouse_name}</span></div>
+                  <div class="meta-pair"><span class="meta-pair-label">PO Amount:</span><span class="meta-pair-value">₹${m.po_total.toLocaleString('en-IN')}</span></div>
+                </div>
+
+                <div class="match-col-box">
+                  <div style="font-size:11px; font-weight:700; color:#0369a1; margin-bottom:6px;">2. GOODS RECEIPT NOTE (GRN)</div>
+                  <div class="meta-pair"><span class="meta-pair-label">GRN Ref:</span><span class="meta-pair-value">${m.grn_number}</span></div>
+                  <div class="meta-pair"><span class="meta-pair-label">Vehicle:</span><span class="meta-pair-value">${m.grn_vehicle}</span></div>
+                  <div class="meta-pair"><span class="meta-pair-label">Remarks:</span><span class="meta-pair-value" style="font-size:10.5px;">${m.grn_remarks || 'Clean inspection'}</span></div>
+                </div>
+
+                <div class="match-col-box">
+                  <div style="font-size:11px; font-weight:700; color:#92400e; margin-bottom:6px;">3. VENDOR INVOICE BILLED</div>
+                  <div class="meta-pair"><span class="meta-pair-label">Invoice Ref:</span><span class="meta-pair-value">${m.invoice_number}</span></div>
+                  <div class="meta-pair"><span class="meta-pair-label">Date:</span><span class="meta-pair-value">${formatDateSafely(m.invoice_date)}</span></div>
+                  <div class="meta-pair"><span class="meta-pair-label">Billed Total:</span><span class="meta-pair-value" style="color:var(--color-danger);">₹${m.billed_total.toLocaleString('en-IN')}</span></div>
+                </div>
+              </div>
+
+              <!-- Line item breakdown -->
+              <div class="data-table-container">
+                <table class="erp-table">
+                  <thead>
+                    <tr>
+                      <th>SKU</th><th>NAME</th><th>PO QTY</th><th>GRN ACCEPTED</th><th>BILLED QTY</th>
+                      <th>QTY DELTA</th><th>PO RATE</th><th>BILLED RATE</th><th>PRICE DELTA</th><th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${linesRows}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function reconcileInvoice(matchId, action) {
+      try {
+        const res = await fetch('/api/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            match_id: matchId,
+            action,
+            notes: `Operator reconciled action [${action}] from Enterprise Ops Console.`
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showAdminToast(`Invoice ${data.invoice_number}: Status updated to ${data.new_status}`, 'success');
+          loadAdminMatchSets();
+          loadAdminPOs();
+        } else {
+          showAdminToast(data.message || 'Reconciliation failed', 'danger');
+        }
+      } catch (err) {
+        showAdminToast('Network error during reconciliation', 'danger');
+      }
+    }
+
+    // Transfers
+    async function loadAdminTransfers() {
+      try {
+        const res = await fetch('/api/transfers');
+        const data = await res.json();
+        if (data.success) {
+          adminTransfers = data.transfers || [];
+          document.getElementById('adminKpiTransitCount').textContent = `${data.active_in_transit} STOs`;
+          renderAdminTransfers(adminTransfers);
+        }
+      } catch (err) {
+        console.error('Error loading transfers:', err);
+      }
+    }
+
+    function renderAdminTransfers(transfers) {
+      const tbody = document.getElementById('adminTransfersTableBody');
+      if (!transfers.length) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px; color:#64748b;">No transfer orders found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = transfers.map(t => `
+        <tr>
+          <td><strong class="font-mono text-primary">${t.sto_number}</strong></td>
+          <td>
+            <div style="font-weight:600;">${t.from_warehouse_name}</div>
+            <div style="font-size:11px; color:#64748b;">${t.from_city} (${t.from_warehouse_code})</div>
+          </td>
+          <td>
+            <div style="font-weight:600;">${t.to_warehouse_name}</div>
+            <div style="font-size:11px; color:#64748b;">${t.to_city} (${t.to_warehouse_code})</div>
+          </td>
+          <td>${t.carrier_name}</td>
+          <td class="font-mono">${t.vehicle_no}</td>
+          <td><span class="badge badge-navy font-mono">${t.eway_bill_no}</span></td>
+          <td class="font-mono text-xs">${formatDateTimeSafely(t.eway_valid_until)}</td>
+          <td><span class="badge ${t.status === 'DELIVERED' ? 'badge-success' : 'badge-amber'}">${t.status}</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="showAdminToast('E-Way Bill ${t.eway_bill_no} verified with National Portal', 'success')">
+              Verify EWB
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Purchase Orders
+    async function loadAdminPOs() {
+      try {
+        const res = await fetch('/api/po');
+        const data = await res.json();
+        if (data.success) {
+          adminPOs = data.orders || [];
+          renderAdminPOs(adminPOs);
+        }
+      } catch (err) {
+        console.error('Error loading POs:', err);
+      }
+    }
+
+    function renderAdminPOs(orders) {
+      const tbody = document.getElementById('adminPoTableBody');
+      if (!orders.length) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:24px; color:#64748b;">No purchase orders found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td><strong class="font-mono text-primary">${o.po_number}</strong></td>
+          <td style="font-weight:600;">${o.vendor_name}</td>
+          <td class="font-mono text-xs">${o.vendor_gst}</td>
+          <td>${o.warehouse_name} (${o.warehouse_code})</td>
+          <td class="font-mono text-xs">${formatDateSafely(o.order_date)}</td>
+          <td class="font-mono text-xs">${formatDateSafely(o.expected_date)}</td>
+          <td class="font-mono" style="text-align:right;">₹${o.subtotal.toLocaleString('en-IN')}</td>
+          <td class="font-mono" style="text-align:right;">₹${o.tax_amount.toLocaleString('en-IN')}</td>
+          <td class="font-mono font-bold" style="text-align:right;">₹${o.total_amount.toLocaleString('en-IN')}</td>
+          <td><span class="badge ${o.status === 'APPROVED' ? 'badge-success' : 'badge-neutral'}">${o.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Item selector population for modals
+    function populateModalItemSelectors() {
+      const items = adminInventory;
+      const html = items.map(it => `
+        <option value="${it.id}">${it.sku} &bull; ${it.name} (Stock: ${it.total_on_hand})</option>
+      `).join('');
+
+      ['adjItemSelect', 'stoItemSelect', 'poItemSelect'].forEach(selId => {
+        const sel = document.getElementById(selId);
+        if (sel) sel.innerHTML = html;
+      });
+    }
+
+    // Cycle Count Modal
+    function openCycleAdjustmentModal() {
+      document.getElementById('cycleAdjustmentModal').classList.add('active');
+    }
+    function openCycleAdjustmentModalForItem(itemId) {
+      openCycleAdjustmentModal();
+      const sel = document.getElementById('adjItemSelect');
+      if (sel) sel.value = itemId;
+    }
+    function closeCycleModal() {
+      document.getElementById('cycleAdjustmentModal').classList.remove('active');
+    }
+
+    async function submitStockAdjustment() {
+      const warehouse_id = document.getElementById('adjWarehouseSelect').value;
+      const item_id = document.getElementById('adjItemSelect').value;
+      const adjustment_qty = parseInt(document.getElementById('adjQtyInput').value || 0, 10);
+      const reason = document.getElementById('adjReasonSelect').value;
+      const note = document.getElementById('adjNoteInput').value;
+
+      try {
+        const res = await fetch('/api/inventory', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ warehouse_id, item_id, adjustment_qty, reason, note })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showAdminToast(`Stock updated: New on-hand qty is ${data.new_qty} units`, 'success');
+          closeCycleModal();
+          loadAdminInventory();
+        } else {
+          showAdminToast(data.message || 'Adjustment failed', 'danger');
+        }
+      } catch (err) {
+        showAdminToast('Network error during adjustment', 'danger');
+      }
+    }
+
+    // STO Modal
+    function openNewStoModal() {
+      document.getElementById('newStoModal').classList.add('active');
+    }
+    function closeStoModal() {
+      document.getElementById('newStoModal').classList.remove('active');
+    }
+
+    async function submitStockTransfer() {
+      const from_warehouse_id = document.getElementById('stoFromWhSelect').value;
+      const to_warehouse_id = document.getElementById('stoToWhSelect').value;
+      const carrier_name = document.getElementById('stoCarrierInput').value;
+      const vehicle_no = document.getElementById('stoVehicleInput').value;
+      const item_id = document.getElementById('stoItemSelect').value;
+      const transfer_qty = parseInt(document.getElementById('stoQtyInput').value || 1, 10);
+
+      if (from_warehouse_id === to_warehouse_id) {
+        showAdminToast('Source and Destination hubs cannot be identical', 'amber');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/transfers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            from_warehouse_id,
+            to_warehouse_id,
+            carrier_name,
+            vehicle_no,
+            items: [{ item_id, transfer_qty }]
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showAdminToast(`STO ${data.transfer.sto_number} created with EWB ${data.transfer.eway_bill_no}!`, 'success');
+          closeStoModal();
+          loadAdminTransfers();
+          loadAdminInventory();
+        } else {
+          showAdminToast(data.message || 'Transfer failed', 'danger');
+        }
+      } catch (err) {
+        showAdminToast('Network error dispatching transfer', 'danger');
+      }
+    }
+
+    // Manual PO Modal
+    function openNewPoModal() {
+      document.getElementById('newPoModal').classList.add('active');
+    }
+    function closePoModal() {
+      document.getElementById('newPoModal').classList.remove('active');
+    }
+
+    async function submitManualPo() {
+      const vendor_name = document.getElementById('poVendorName').value;
+      const vendor_gst = document.getElementById('poVendorGst').value;
+      const warehouse_id = document.getElementById('poWarehouseSelect').value;
+      const item_id = document.getElementById('poItemSelect').value;
+      const ordered_qty = parseInt(document.getElementById('poQtyInput').value || 1, 10);
+
+      try {
+        const res = await fetch('/api/po', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            vendor_name,
+            vendor_gst,
+            warehouse_id,
+            items: [{ item_id, ordered_qty }]
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showAdminToast(`PO ${data.order.po_number} successfully issued!`, 'success');
+          closePoModal();
+          loadAdminPOs();
+        } else {
+          showAdminToast(data.message || 'PO creation failed', 'danger');
+        }
+      } catch (err) {
+        showAdminToast('Network error creating PO', 'danger');
+      }
+    }
+
+    // Auto-PO Batch Replenishment Trigger
+    async function triggerAutoPOReplenishment() {
+      try {
+        const res = await fetch('/api/po', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'auto_replenish' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showAdminToast(data.message, 'success');
+          loadAdminPOs();
+        } else {
+          showAdminToast('Failed to auto-replenish', 'danger');
+        }
+      } catch (err) {
+        showAdminToast('Network error running auto-replenishment', 'danger');
+      }
+    }
+
+    // Whitelabel Modal
+    function openWhitelabelModal() {
+      document.getElementById('whitelabelModal').classList.add('active');
+      updateShareableLink();
+    }
+    function closeWhitelabelModal() {
+      document.getElementById('whitelabelModal').classList.remove('active');
+    }
+
+    function updateShareableLink() {
+      const brand = encodeURIComponent(document.getElementById('adminWlBrandInput').value);
+      const tagline = encodeURIComponent(document.getElementById('adminWlTaglineInput').value);
+      const primary = encodeURIComponent(document.getElementById('adminWlColorHex').value.replace('#', ''));
+      const wa = encodeURIComponent(document.getElementById('adminWaInput').value);
+
+      const url = `${window.location.origin}/?brand=${brand}&tagline=${tagline}&primary=${primary}&wa=${wa}`;
+      document.getElementById('shareableLinkPreview').value = url;
+    }
+
+    function applyWhitelabelSettings() {
+      const brand = document.getElementById('adminWlBrandInput').value;
+      const tagline = document.getElementById('adminWlTaglineInput').value;
+      const primary = document.getElementById('adminWlColorHex').value;
+      const wa = document.getElementById('adminWaInput').value;
+
+      const url = new URL(window.location.href);
+      url.searchParams.set('brand', brand);
+      url.searchParams.set('tagline', tagline);
+      url.searchParams.set('primary', primary.replace('#', ''));
+      url.searchParams.set('wa', wa);
+
+      window.history.replaceState({}, '', url.toString());
+      if (window.applyWhiteLabel) {
+        window.applyWhiteLabel();
+      }
+
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        showAdminToast('Whitelabel applied & shareable URL copied to clipboard!', 'success');
+      }).catch(() => {
+        showAdminToast('Whitelabel applied to current session!', 'success');
+      });
+
+      closeWhitelabelModal();
+    }
+
+    function resetWhitelabelDefaults() {
+      window.location.href = window.location.pathname + '?reset_wl=1';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAllAdminData();
+    });
+  </script>
 </body>
 </html>
