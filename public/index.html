@@ -3,470 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS SUPPLY ERP — Large ERP</title>
+  <title data-wl-brand>KRONOS ERP // Multi-Warehouse Ledger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="theme-tokens.css">
   <script src="whitelabel.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: var(--font-primary);
-      background-color: var(--bg-main);
-      color: var(--color-dark);
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-    }
-    .top-bar {
-      background: var(--bg-canvas);
-      color: var(--color-dark);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      text-align: center;
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border-color);
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-    }
-    .nav-container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 15px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .brand-logo {
-      font-family: var(--font-accent);
-      font-size: 23px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--color-dark);
-      text-decoration: none;
-    }
-    .brand-logo span {
-      font-family: var(--font-primary);
-      color: var(--color-primary);
-      font-size: 11px;
-      letter-spacing: 2px;
-      display: block;
-      margin-top: -2px;
-    }
-    nav.desktop-nav { display: flex; gap: 22px; align-items: center; }
-    nav.desktop-nav a {
-      color: var(--color-dark);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    nav.desktop-nav a:hover { color: var(--color-primary); }
-    .btn-primary {
-      background: var(--color-primary);
-      color: #FFFFFF;
-      border: none;
-      padding: 11px 20px;
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-outline {
-      background: transparent;
-      color: var(--color-dark);
-      border: 1px solid var(--border-color);
-      padding: 11px 20px;
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .hero-banner {
-      padding: 64px 24px 52px;
-      max-width: 1240px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .hero-pill {
-      display: inline-block;
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-color);
-      color: var(--color-primary);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      margin-bottom: 18px;
-    }
-    .hero-banner h1 {
-      font-family: var(--font-accent);
-      font-size: clamp(32px, 4.6vw, 56px);
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-    .hero-banner p {
-      font-size: 16px;
-      color: #64748B;
-      max-width: 680px;
-      margin: 0 auto 26px;
-    }
-    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .section-wrap { max-width: 1240px; margin: 0 auto; padding: 42px 24px; }
-    .section-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--grid-gap-desktop);
-    }
-    .bento-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
+      background: var(--bg-main, #F1F5F9);
+      color: #0F172A;
+      font-family: var(--font-primary, 'Inter', sans-serif);
+      height: 100vh;
       overflow: hidden;
       display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
     }
-    .bento-card:hover { transform: translateY(-4px); border-color: var(--color-primary); }
-    .bento-img-wrap { height: 210px; position: relative; background: var(--bg-canvas); overflow: hidden; }
-    .bento-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .bento-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--color-primary);
+    .erp-sidebar {
+      width: 220px;
+      background: #0F172A;
       color: #FFF;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 4px;
-    }
-    .bento-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
-    .bento-code { font-size: 11px; color: #64748B; font-weight: 600; margin-bottom: 4px; }
-    .bento-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .bento-sub { font-size: 13px; color: #64748B; margin-bottom: 14px; flex: 1; }
-    .bento-footer {
+      padding: 24px 16px;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      padding-top: 12px;
-      border-top: 1px solid var(--border-color);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--color-primary);
+      font-family: var(--font-mono, monospace);
+      font-size: 12px;
     }
-    .calc-panel {
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 32px;
+    .erp-nav a { color: #94A3B8; text-decoration: none; display: block; padding: 8px; border-radius: 4px; margin-bottom: 4px; }
+    .erp-nav a.active { background: #1E293B; color: #38BDF8; font-weight: 700; }
+
+    .erp-main {
+      flex: 1;
+      padding: 24px 30px;
+      overflow-y: auto;
+    }
+    .kpi-row {
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 28px;
-      align-items: center;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 20px 0;
     }
-    .slider-group { margin-bottom: 18px; }
-    .slider-group label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .slider-group input[type="range"] { width: 100%; accent-color: var(--color-primary); }
-    .calc-result-card {
-      background: #FFFFFF;
-      border: 2px solid var(--color-primary);
-      border-radius: var(--radius);
-      padding: 24px;
-      text-align: center;
-    }
-    .calc-result-val {
-      font-family: var(--font-accent);
-      font-size: 38px;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin: 8px 0 14px;
-    }
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      z-index: 900;
-      display: none;
-      align-items: center;
-      justify-content: center;
+    .kpi-card {
+      background: #FFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
       padding: 16px;
     }
-    .modal-overlay.open { display: flex; }
-    .modal-box {
-      background: #FFFFFF;
-      color: var(--color-dark);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      max-width: 480px;
+    .ledger-grid {
       width: 100%;
-      padding: 24px;
-    }
-    .form-field { margin-bottom: 12px; }
-    .form-field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; color: #64748B; }
-    .form-field input {
-      width: 100%;
-      padding: 10px;
-      background: var(--bg-main);
-      color: var(--color-dark);
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-    }
-    .wa-float-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
-      background: #25D366;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 500;
-      text-decoration: none;
-      color: #FFF;
-      font-size: 22px;
-    }
-    .admin-pill-floating {
-      position: fixed;
-      bottom: 24px;
-      left: 24px;
-      background: var(--color-dark);
-      color: #FFF;
-      padding: 10px 16px;
-      border-radius: 999px;
+      border-collapse: collapse;
+      background: #FFF;
+      border: 1px solid #CBD5E1;
+      font-family: var(--font-mono);
       font-size: 12px;
-      font-weight: 600;
-      text-decoration: none;
-      z-index: 500;
     }
-    @media (max-width: 860px) {
-      .bento-grid, .calc-panel { grid-template-columns: 1fr; }
-      nav.desktop-nav, .admin-pill-floating { display: none; }
-    }
+    .ledger-grid th { background: #F8FAFC; border: 1px solid #CBD5E1; padding: 10px; text-align: left; }
+    .ledger-grid td { border: 1px solid #CBD5E1; padding: 10px; }
   </style>
 </head>
-<body>
-  <div class="top-bar">MULTI-BRANCH ERP // KOCHI CENTRAL HUB • CALICUT DEPOT • COIMBATORE WAREHOUSE</div>
-  <header>
-    <div class="nav-container">
-      <a href="#" class="brand-logo">NEXUS SUPPLY ERP</a>
-      <nav class="desktop-nav">
-        <a href="#catalog">Catalog / Modules</a>
-        <a href="#calculator">Interactive Calculator</a>
-        <a href="admin.html">Admin / POS Hub</a>
-      </nav>
-      <button class="btn-primary" onclick="openLeadModal()">Raise Purchase Requisition / Inter-Branch Transfer</button>
-    </div>
-  </header>
-
-  <section class="hero-banner">
-    <span class="hero-pill">MULTI-BRANCH ERP // KOCHI CENTRAL HUB • CALICUT DEPOT • COIMBATORE WAREHOUSE</span>
-    <h1 data-wl-brand>NEXUS SUPPLY ERP</h1>
-    <p data-wl-tagline>Multi-warehouse stock ledger, Purchase Requisition -> PO -> GRN matching & B2B dealer portal.</p>
-    <div class="hero-actions">
-      <button class="btn-primary" onclick="openLeadModal()">Raise Purchase Requisition / Inter-Branch Transfer</button>
-      <a href="#calculator" class="btn-outline">EOQ & Reorder Buffer Calculator</a>
-    </div>
-  </section>
-
-  <section class="section-wrap" id="catalog">
-    <div class="section-head">
-      <h2>Live Multi-Warehouse Stock Ledger & Reorder Thresholds</h2>
-      <div id="drawerWaText" style="font-size:12px;color:#64748B;">WhatsApp: +91 90619 02295</div>
-    </div>
-    <div class="bento-grid" id="bentoGrid"></div>
-  </section>
-
-  <section class="section-wrap" id="calculator">
-    <div class="calc-panel">
-      <div>
-        <h2 style="font-family:var(--font-accent);font-size:26px;margin-bottom:6px;">Procurement Reorder & Landed Cost Valuation Calculator</h2>
-        <p style="font-size:13px;color:#64748B;margin-bottom:20px;">Calculate total landed PO cost including freight, customs/IGST, and safety buffer.</p>
-        <div class="slider-group">
-          <label><span>Purchase Order Quantity (Units)</span><strong id="valSliderA" style="color:var(--color-primary);">150</strong></label>
-          <input type="range" id="sliderA" min="10" max="1000" value="150" oninput="recalc()">
-        </div>
-        <div class="slider-group">
-          <label><span>Unit Base Cost Tier (1=₹850 Consumable, 2=₹4200 Component, 3=₹18500 Assembly)</span><strong id="valSliderB" style="color:var(--color-primary);">2</strong></label>
-          <input type="range" id="sliderB" min="1" max="3" value="2" oninput="recalc()">
-        </div>
-      </div>
-      <div class="calc-result-card">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#64748B;">Total Landed Purchase Order Value (3-Way GRN Match Ready)</div>
-        <div class="calc-result-val" id="calcOutput">₹0</div>
-        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="openLeadModal()">Submit Purchase Requisition / Stock Transfer Order</button>
+<body data-layout-archetype="financial-ledger-erp">
+  <aside class="erp-sidebar">
+    <div>
+      <div style="font-weight:700; font-size:16px; color:#38BDF8; margin-bottom:24px;" data-wl-brand>KRONOS ERP</div>
+      <div class="erp-nav">
+        <a href="#" class="active">Inventory & WH</a>
+        <a href="#">3-Way Matching</a>
+        <a href="#">GST Tax Invoices</a>
+        <a href="admin.html">E-Way Bills</a>
       </div>
     </div>
-  </section>
+    <div style="font-size:11px; color:#64748B;">HUB: BOM-CENTRAL (WH-01)</div>
+  </aside>
 
-  <div class="modal-overlay" id="leadModal">
-    <div class="modal-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <h3 style="font-size:18px;">Submit Purchase Requisition / Stock Transfer Order</h3>
-        <button onclick="closeLeadModal()" style="background:none;border:none;color:inherit;font-size:18px;cursor:pointer;">✕</button>
-      </div>
-      <form onsubmit="submitLead(event)">
-        <div class="form-field"><label>Name / Business / Table *</label><input type="text" id="leadName" required placeholder="e.g. Anand Varma"></div>
-        <div class="form-field"><label>WhatsApp / Mobile Number *</label><input type="tel" id="leadPhone" required placeholder="919876543210"></div>
-        <div class="form-field"><label>Order / Ticket Details</label><input type="text" id="leadDetail" readonly></div>
-        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Confirm & Sync to Admin / POS</button>
-      </form>
-      <div id="leadSuccessBox" style="display:none;margin-top:14px;padding:12px;background:var(--bg-canvas);border:1px solid var(--color-primary);border-radius:4px;font-size:12px;"></div>
+  <main class="erp-main">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="font-size:20px; font-weight:700;">Multi-Branch Inventory & 3-Way Match Ledger</h2>
+      <select style="padding:6px; font-family:var(--font-mono);">
+        <option>All Warehouses (Kochi / Mumbai / Delhi)</option>
+        <option>WH-01 Kochi Central</option>
+      </select>
     </div>
-  </div>
 
-  <a href="admin.html" class="admin-pill-floating">⚙️ Open Admin / POS Command Center</a>
-  <a id="floatingWaBtn" href="https://wa.me/919061902295" target="_blank" class="wa-float-btn">💬</a>
+    <div class="kpi-row">
+      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">TOTAL STOCK VALUE</div><div style="font-size:22px; font-weight:700;">₹4.82 CR</div></div>
+      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">PENDING PO-GRN MATCH</div><div style="font-size:22px; font-weight:700; color:#F59E0B;">12 INVOICES</div></div>
+      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">GST ITC CLAIMABLE</div><div style="font-size:22px; font-weight:700; color:#10B981;">₹28.4 LAKHS</div></div>
+      <div class="kpi-card"><div style="color:#64748B; font-size:11px;">TRANSIT STOCK</div><div style="font-size:22px; font-weight:700;">3 CONSIGNMENTS</div></div>
+    </div>
 
-  <script>
-    const ITEMS = [
-  {
-    "code": "WH-SKU-1001",
-    "title": "Cold-Rolled Steel Coil 1.2mm (CRCA Grade D)",
-    "sub": "Kochi Hub: 42 MT | Calicut: 18 MT | Coimbatore: 64 MT • Min Reorder: 25 MT",
-    "metric": "124 MT Total Stock",
-    "badge": "OPTIMAL BUFFER",
-    "img": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "code": "WH-SKU-1002",
-    "title": "Industrial Servo Motor 2.5kW IP65 (Siemens/Delta Spec)",
-    "sub": "Kochi Hub: 6 Units | Calicut: 2 Units • Min Reorder: 15 Units",
-    "metric": "8 Units (LOW STOCK)",
-    "badge": "AUTO-PO TRIGGERED",
-    "img": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "code": "WH-SKU-1003",
-    "title": "Corrugated 5-Ply Master Export Cartons (Pallet of 500)",
-    "sub": "Kochi Hub: 18 Pallets | Calicut: 9 Pallets • FIFO Batch Tracked",
-    "metric": "27 Pallets Ready",
-    "badge": "PACKAGING HUB",
-    "img": "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "code": "WH-FLOW-PO",
-    "title": "3-Way Matching: Purchase Order ↔ GRN ↔ Vendor Bill",
-    "sub": "Blocks vendor payment automatically if GRN quantity or landed cost deviates >1%",
-    "metric": "Zero Leakage Control",
-    "badge": "PROCUREMENT",
-    "img": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "code": "WH-FLOW-XFER",
-    "title": "Inter-Branch Stock Transfer & E-Way Bill Generator",
-    "sub": "Real-time In-Transit stock quarantine between Kochi, Calicut & Bangalore hubs",
-    "metric": "Live Fleet GPS Sync",
-    "badge": "LOGISTICS",
-    "img": "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    "code": "WH-FLOW-AUDIT",
-    "title": "Barcode Cycle Count & Double-Entry Stock Valuation",
-    "sub": "FIFO / Moving Average cost ledger synced with Tally Prime & ERPNext v15",
-    "metric": "99.94% Audit Match",
-    "badge": "FINANCE LEDGER",
-    "img": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80"
-  }
-];
-    let selectedTitle = ITEMS[0].title;
-    let calcFormatted = '';
-
-    function renderGrid() {
-      document.getElementById('bentoGrid').innerHTML = ITEMS.map((it, i) => `
-        <article class="bento-card" onclick="selectItem(${i})">
-          <div class="bento-img-wrap">
-            <img src="${it.img}" alt="${it.title}" loading="lazy">
-            <span class="bento-badge">${it.badge}</span>
-          </div>
-          <div class="bento-body">
-            <div class="bento-code">${it.code}</div>
-            <div class="bento-title">${it.title}</div>
-            <div class="bento-sub">${it.sub}</div>
-            <div class="bento-footer"><span>${it.metric}</span><span>Select →</span></div>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    function recalc() {
-      const team = Number(document.getElementById('sliderA').value);
-      const hours = Number(document.getElementById('sliderB').value);
-      document.getElementById('valSliderA').textContent = team;
-      document.getElementById('valSliderB').textContent = hours;
-      const val = Math.round(team * (hours === 1 ? 850 : hours === 2 ? 4200 : 18500) * 1.18);
-      calcFormatted = '₹' + Number(val).toLocaleString('en-IN');
-      document.getElementById('calcOutput').textContent = calcFormatted;
-    }
-
-    function selectItem(idx) {
-      selectedTitle = ITEMS[idx].title + ' (' + ITEMS[idx].metric + ')';
-      openLeadModal();
-    }
-
-    function openLeadModal() {
-      document.getElementById('leadDetail').value = selectedTitle + ' • Total: ' + calcFormatted;
-      document.getElementById('leadSuccessBox').style.display = 'none';
-      document.getElementById('leadModal').classList.add('open');
-    }
-
-    function closeLeadModal() {
-      document.getElementById('leadModal').classList.remove('open');
-    }
-
-    function submitLead(e) {
-      e.preventDefault();
-      const entry = {
-        id: 'TX-' + Math.floor(1000 + Math.random() * 9000),
-        name: document.getElementById('leadName').value.trim(),
-        phone: document.getElementById('leadPhone').value.trim(),
-        detail: document.getElementById('leadDetail').value.trim(),
-        amount: calcFormatted,
-        status: 'LIVE // QUEUED'
-      };
-      try {
-        const list = JSON.parse(localStorage.getItem('bmad_leads_tpl-lerp-warehouse-erp') || '[]');
-        list.unshift(entry);
-        localStorage.setItem('bmad_leads_tpl-lerp-warehouse-erp', JSON.stringify(list));
-      } catch (err) {}
-      const box = document.getElementById('leadSuccessBox');
-      box.style.display = 'block';
-      box.innerHTML = '✓ Dispatched (' + entry.id + ')! Open <a href="admin.html" style="color:var(--color-primary);font-weight:700;">Admin / POS Hub</a> to process.';
-    }
-
-    renderGrid();
-    recalc();
-  </script>
+    <table class="ledger-grid">
+      <thead>
+        <tr>
+          <th>PO REF</th>
+          <th>GRN RECEIPT</th>
+          <th>VENDOR INVOICE</th>
+          <th>HSN CODE</th>
+          <th>PO VALUE</th>
+          <th>BILLED VALUE</th>
+          <th>VARIANCE</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>PO #8841</strong></td>
+          <td>GRN #4421</td>
+          <td>INV #TATA-991</td>
+          <td>7208 (Steel)</td>
+          <td>₹8,40,000</td>
+          <td>₹8,40,000</td>
+          <td style="color:#10B981;">₹0.00 (0%)</td>
+          <td style="color:#10B981;">✓ 3-WAY MATCHED</td>
+        </tr>
+        <tr>
+          <td><strong>PO #8842</strong></td>
+          <td>GRN #4425</td>
+          <td>INV #JSW-104</td>
+          <td>7214 (Rebars)</td>
+          <td>₹12,50,000</td>
+          <td>₹12,75,000</td>
+          <td style="color:#EF4444;">+₹25,000 (2%)</td>
+          <td style="color:#F59E0B;">⚠ VARIANCE REVIEW</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
 </body>
 </html>

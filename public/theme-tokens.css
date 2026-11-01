@@ -1,17 +1,31 @@
-/* Extracted via tpl-tools-design-extractor for tpl-lerp-warehouse-erp */
+/* ==========================================================================
+   BMAD Normalized Design Tokens & Movement Blueprint (theme-tokens.css)
+   Movement  : [Q] Dense Financial Ledger & 3-Way Match ERP
+   Archetype : Multi-Warehouse Inventory, GST HSN Split & PO-GRN-Invoice 3-Way Match ERP (Frappe ERPNext / Ramp / Mercury)
+   Reference : https://frappe.io/erpnext
+   Contract  : whitelabel-and-showroom-contract.md §2 + design-movements-and-layout-blueprints.md
+   ========================================================================== */
+
 :root {
   --font-primary: 'Inter', sans-serif;
-  --font-accent: 'Space Grotesk', sans-serif;
-  --color-primary: #4F46E5;
+  --font-accent: 'IBM Plex Mono', monospace;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --color-primary: #2563EB;
   --brand-primary: var(--color-primary);
+
   --color-dark: #0F172A;
   --brand-dark: var(--color-dark);
-  --bg-main: #F8FAFC;
-  --bg-canvas: #EEF2FF;
+
+  --bg-main: #F1F5F9;
+  --bg-canvas: #FFFFFF;
   --bg-sand: var(--bg-canvas);
-  --border-color: #C7D2FE;
-  --grid-gap-desktop: 28px 22px;
-  --grid-gap-mobile: 16px 14px;
-  --radius: 6px;
+
+  --border-color: #CBD5E1;
+  --border-structural: 1px solid #CBD5E1;
+  --shadow-token: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --grid-gap-desktop: 12px;
+  --grid-gap-mobile: 8px;
+  --radius: 4px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
